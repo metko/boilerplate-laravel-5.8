@@ -11,7 +11,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 class UserTest extends TestCase
 {
     use RefreshDatabase;
-
+    
     /** @test */
     public function a_guest_can_see_the_login_page()
     {	

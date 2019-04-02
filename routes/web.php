@@ -17,4 +17,9 @@ Route::get('/', function () {
 
 Auth::routes();
 
+Route::get('/posts/create', 'PostController@create');
+Route::get('/posts/{post}', 'PostController@show');
+Route::delete('/posts/{post}', 'PostController@destroy');
+Route::post('/posts', 'PostController@store');
+
 Route::get('/home', 'HomeController@index')->name('home');

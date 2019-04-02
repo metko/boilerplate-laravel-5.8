@@ -53,5 +53,11 @@ class User extends Authenticatable
             return $role->name == 'member';
         }    
     }
+
+    public function isWriter(){
+        foreach($this->roles as $role){
+            return $role->name == 'writer';
+        }    
+    }
     
 }

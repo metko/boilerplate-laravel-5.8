@@ -48,6 +48,16 @@ class UserTest extends TestCase
         $user = factory(User::class)->create();
         $this->assertTrue($user->isMember());
     }
+
+    /** @test */
+    public function it_has_writter()
+    {	
+        $this->withoutExceptionHandling();
+        $role = factory(Role::class)->create(['name' => 'writer']);
+        $user = factory(User::class)->create();
+        $user->assignRole('writer');
+        $this->assertTrue($user->isWriter());
+    }
     
 
 }
