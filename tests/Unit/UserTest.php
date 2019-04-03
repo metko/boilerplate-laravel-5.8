@@ -51,6 +51,14 @@ class UserTest extends TestCase
         $user = UserFactory::withRole('writer')->create();
         $this->assertTrue($user->isWriter());
     }
+
+    /** @test */
+    public function it_has_admin()
+    {	
+        $this->withoutExceptionHandling();
+        $user = UserFactory::withRole('admin')->create();
+        $this->assertTrue($user->isAdmin());
+    }
     
 
 }

@@ -10,6 +10,13 @@ class PostCommentsPolicy
 {
     use HandlesAuthorization;
 
+    public function before(User $user)
+    {
+        if($user->isAdmin()){
+            return true;
+        }
+    }
+
     public function manage(User $user, Comment $comment)
     {
         return $user->is($comment->owner) || $user->is($comment->post->owner);

@@ -60,5 +60,11 @@ class User extends Authenticatable
             return $role->name == 'writer';
         }    
     }
+
+    public function isAdmin(){
+        foreach($this->roles as $role){
+            return $role->name == 'admin';
+        }    
+    }
     
 }

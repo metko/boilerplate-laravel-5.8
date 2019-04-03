@@ -10,6 +10,13 @@ class PostPolicy
 {
     use HandlesAuthorization;
     
+    public function before(User $user)
+    {
+        if($user->isAdmin()){
+            return true;
+        }
+    }
+
     public function create(User $user)
     {    
         return $user->isWriter();
