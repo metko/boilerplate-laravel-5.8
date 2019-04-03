@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Role;
 use App\User;
 use Tests\TestCase;
+use Facades\Tests\Setup\PostFactory;
 use Facades\Tests\Setup\UserFactory;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -14,19 +15,7 @@ class UserTest extends TestCase
     use RefreshDatabase;
     
     /** @test */
-    public function a_guest_can_see_the_login_page()
-    {	
-        $this->get(route('login'))->assertStatus(200);
-    }
-
-    /** @test */
-    public function a_guest_can_see_the_register_page()
-    {	
-        $this->get(route('register'))->assertStatus(200);
-    }
-
-    /** @test */
-    public function a_register_user_cant_make_new_registration()
+    public function a_register_user_cannot_make_new_registration()
     {	
         $user = UserFactory::create();
         $attributes = factory(User::class)->raw();

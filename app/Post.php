@@ -16,4 +16,18 @@ class Post extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
+
+    public function addComment($attributes)
+    {
+
+        return $this->comments()->create([
+            'body' => $attributes['body'],
+            'owner_id' => auth()->user()->id
+        ]);
+    }
 }
