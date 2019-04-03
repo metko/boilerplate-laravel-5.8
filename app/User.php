@@ -45,7 +45,8 @@ class User extends Authenticatable
 
     public function assignRole($role)
     {
-        return $this->roles()->attach(Role::whereName($role)->first());
+        $role = Role::whereName($role)->first() ?? null;
+        return $this->roles()->attach($role);
     } 
 
     public function isMember(){

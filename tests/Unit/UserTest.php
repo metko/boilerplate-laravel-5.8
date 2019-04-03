@@ -5,6 +5,7 @@ namespace Tests\Unit;
 use App\Role;
 use App\User;
 use Tests\TestCase;
+use Facades\Tests\Setup\UserFactory;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -15,29 +16,23 @@ class UserTest extends TestCase
     /** @test */
     public function it_has_a_role()
     {	
-        $user = factory(User::class)->create();
-        $role = factory(Role::class)->create();
-        $user->assignRole($role->name);
+        $user = UserFactory::create();
         $this->assertInstanceOf(Role::class, $user->roles->first());
-
     }
 
     /** @test */
     public function it_can_assign_roles()
     {	
-        $user = factory(User::class)->create();
-        $role = factory(Role::class)->create(['name' => "role-test"]);
-        $user->assignRole($role->name);
+        $user = UserFactory::withRole('role-test')->create();
         $this->assertEquals("role-test" , $user->roles->first()->name);
     }
 
     /** @test */
     public function it_cant_assign_roles_that_doesnt_exists()
     {	
-        $user = factory(User::class)->create();
-        $role = factory(Role::class)->create();
+        $user = UserFactory::create();
         $user->assignRole("fake-role");
-        $this->assertDatabaseMissing("role_user" , ['user_id' => $user->id]);
+        $this->assertCount(2 , $user->roles);
     }
 
     /** @test */
@@ -53,9 +48,7 @@ class UserTest extends TestCase
     public function it_has_writter()
     {	
         $this->withoutExceptionHandling();
-        $role = factory(Role::class)->create(['name' => 'writer']);
-        $user = factory(User::class)->create();
-        $user->assignRole('writer');
+        $user = UserFactory::withRole('writer')->create();
         $this->assertTrue($user->isWriter());
     }
     
