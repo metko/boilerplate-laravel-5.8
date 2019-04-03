@@ -10,13 +10,15 @@ class PostPolicy
 {
     use HandlesAuthorization;
     
-    public function create(User $user){
-        
+    public function create(User $user)
+    {    
         return $user->isWriter();
     }
 
-    public function delete(User $user, Post $post)
+    public function manage(User $user, Post $post)
     {
-        return $user->id == $post->owner_id;
+        if($user->isWriter()){
+            return $user->id == $post->owner_id;
+        }
     }
 }

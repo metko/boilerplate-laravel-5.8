@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Role;
 use App\User;
 use Tests\TestCase;
+use Facades\Tests\Setup\UserFactory;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -27,8 +28,7 @@ class UserTest extends TestCase
     /** @test */
     public function a_register_user_cant_make_new_registration()
     {	
-        $this->withoutExceptionHandling();
-        $user = factory(User::class)->create();
+        $user = UserFactory::create();
         $attributes = factory(User::class)->raw();
         $this->actingAs($user)->post(route('register'))->assertStatus(302);
         $this->assertDatabaseMissing('users', ['name' => $attributes['name']]);
@@ -38,11 +38,8 @@ class UserTest extends TestCase
     /** @test */
     public function a_user_can_have_multiple_roles()
     {	
-        $user = factory(User::class)->create();
-        $role1 = factory(Role::class)->create();
-        $role2 = factory(Role::class)->create();
-        $user->assignRole($role1->name);
-        $user->assignRole($role2->name);
+        $user = UserFactory::create();
+        $user->assignRole('writer');
         $this->assertCount(2, $user->roles);
     }
 

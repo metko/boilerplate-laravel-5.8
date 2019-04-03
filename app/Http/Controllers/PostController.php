@@ -32,11 +32,22 @@ class PostController extends Controller
         return redirect($post->path());
     }
 
-
+    public function update(Post $post){
+        $this->authorize('create', Post::class);
+        $this->authorize('manage', $post);
+        $attributes = request()->validate([
+            'title' => 'required',
+            'body' => 'required'
+        ]);
+        $post->update($attributes);
+        return redirect($post->path());
+        
+    }
 
     public function destroy(Post $post)
     {
-        $this->authorize('delete', $post);
+        $this->authorize('create', Post::class);
+        $this->authorize('manage', $post);
 
         $post->delete();
         return redirect('/posts');
