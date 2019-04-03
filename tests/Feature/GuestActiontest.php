@@ -23,7 +23,7 @@ class GuestActiontest extends TestCase
     }
 
     /** @test */
-    public function a_guest_cannot_post_a_comment()
+    public function a_guest_cannot_manage_a_comment()
     {	
         //$this->withoutExceptionHandling();
         $post = PostFactory::create();

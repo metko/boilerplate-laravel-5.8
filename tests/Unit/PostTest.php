@@ -41,6 +41,17 @@ class PostTest extends TestCase
     }
 
     /** @test */
+    public function it_can_createPost()
+    {	
+        $this->signIn();
+        $attributes = [
+            'title' => 'A title', 'body' => 'A body'
+        ];
+        $post = new Post();
+        $post->createPost($attributes);
+        $this->assertDatabaseHas('posts', $attributes);
+    }
+    /** @test */
     public function it_has_comments()
     {	
         $post = factory(Post::class)->create();

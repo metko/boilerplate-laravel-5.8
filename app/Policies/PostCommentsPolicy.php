@@ -12,7 +12,7 @@ class PostCommentsPolicy
 
     public function manage(User $user, Comment $comment)
     {
-        return $user->is($comment->owner);
+        return $user->is($comment->owner) || $user->is($comment->post->owner);
     }
 
 

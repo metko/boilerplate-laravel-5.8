@@ -8,31 +8,57 @@ use Illuminate\Http\Request;
 
 class PostCommentsController extends Controller
 {
+    /**
+     * store
+     *
+     * @param  mixed $request
+     * @param  mixed $post
+     *
+     * @return void
+     */
     public function store(Request $request, Post $post)
     {
         $attributes = $this->validateRequest($request);
         $comment = $post->addComment($attributes);
     }
 
-
+    /**
+     * update
+     *
+     * @param  mixed $request
+     * @param  mixed $comment
+     *
+     * @return void
+     */
     public function update(Request $request, Comment $comment)
     {   
         $this->authorize('manage', $comment);
-
         $attributes = $this->validateRequest($request);
-        $attributes['owner_id'] = auth()->user()->id;
-        
         $comment->update($attributes);
     }
 
+    /**
+     * destroy
+     *
+     * @param  mixed $request
+     * @param  mixed $comment
+     *
+     * @return void
+     */
     public function destroy(Request $request, Comment $comment)
     {
         $this->authorize('manage', $comment);
-        $post = $comment->post;
         $comment->delete();
-        return redirect($post->path());
+        return redirect($comment->post->path());
     }
 
+    /**
+     * validateRequest
+     *
+     * @param  mixed $request
+     *
+     * @return void
+     */
     private function validateRequest(Request $request){
        
         return $request->validate([

@@ -24,10 +24,18 @@ class Post extends Model
 
     public function addComment($attributes)
     {
-
         return $this->comments()->create([
             'body' => $attributes['body'],
             'owner_id' => auth()->user()->id
+        ]);
+    }
+
+    public function createPost($attributes)
+    {   
+        return $this->create([
+            'title' => $attributes['title'],
+            'body' => $attributes['body'],
+            'owner_id' => auth()->user()->id,
         ]);
     }
 }

@@ -1,5 +1,6 @@
 <?php
 
+use App\User;
 use Faker\Generator as Faker;
 
 $factory->define(App\Post::class, function (Faker $faker) {
@@ -7,7 +8,7 @@ $factory->define(App\Post::class, function (Faker $faker) {
         'title' => $faker->name,
         'body' => $faker->paragraph,
         'owner_id' => function() {
-            return factory(App\User::class)->create()->id;
+            return factory(User::class)->create()->id;
         }
     ];
 });

@@ -23,12 +23,11 @@ class CommentFactory{
    }
 
    public function create(){
-    
     $comment = factory(Comment::class)->create([
         'post_id' => $this->post ?? factory(Post::class)->create()->id,
         'owner_id' => $this->user ?? factory(User::class)->create()->id
     ]);
-    
+
     return $comment;
    }
 }

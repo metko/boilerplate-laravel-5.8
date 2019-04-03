@@ -19,29 +19,19 @@ class PostController extends Controller
     }
 
 
-    public function store(Request $request)
+    public function store(Request $request, Post $post)
     {   
         $this->authorize('create', Post::class);
-        $attributes = request()->validate([
-            'title' => 'required',
-            'body' => 'required'
-        ]);
-
-        $attributes["owner_id"] = auth()->user()->id;
-        $post = Post::create($attributes);
+        $attributes = $this->validateRequest(request());
+        $post->createPost($attributes);
         return redirect($post->path());
     }
 
-    public function update(Post $post){
-        $this->authorize('create', Post::class);
+    public function update(Post $post)
+    {
         $this->authorize('manage', $post);
-        $attributes = request()->validate([
-            'title' => 'required',
-            'body' => 'required'
-        ]);
-        $post->update($attributes);
+        $post->update( $this->validateRequest(request()));
         return redirect($post->path());
-        
     }
 
     public function destroy(Post $post)
@@ -51,5 +41,13 @@ class PostController extends Controller
 
         $post->delete();
         return redirect('/posts');
+    }
+
+    private function validateRequest($request)
+    {
+        return $request->validate([
+            'title' => 'required',
+            'body' => 'required'
+        ]);
     }
 }
