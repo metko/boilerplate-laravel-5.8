@@ -1,20 +1,21 @@
+/**
+ * VARIABLES
+ */
 
-// Body
-$body-bg: #f8fafc;
+ /**COLORS */
+$color-initial: #fff !default;
+$color-primary: #9b4dca !default;
+$color-secondary: #606c76 !default;
+$color-tertiary: #f4f5f6 !default;
+$color-quaternary: #d1d1d1 !default;
+$color-quinary: #e1e1e1 !default;
+$gray-lighter: #f4f5f685 !default;
+$color-warning: red !default;
 
-// Typography
-$font-family-sans-serif: "Nunito", sans-serif;
-$font-size-base: 0.9rem;
-$line-height-base: 1.6;
+/**LAYOUT */
+$container-width: 1024px;
 
-// Colors
-$blue: #3490dc;
-$indigo: #6574cd;
-$purple: #9561e2;
-$pink: #f66D9b;
-$red: #e3342f;
-$orange: #f6993f;
-$yellow: #ffed4a;
-$green: #38c172;
-$teal: #4dc0b5;
-$cyan: #6cb2eb;
+
+/**TYPO */
+
+$text-small: 1.3rem;

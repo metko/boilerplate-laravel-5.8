@@ -1,0 +1,11 @@
+.container{
+   width: 100%;
+   max-width: $container-width;
+   margin-top : 3rem;
+   margin-bottom : 3rem;
+}
+.container-nm{
+   @extend .container;
+   margin-top : 0;
+   margin-bottom : 0;
+}

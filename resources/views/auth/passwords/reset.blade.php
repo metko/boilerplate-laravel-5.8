@@ -1,4 +1,4 @@
-@extends('layouts.app')
+{{-- @extends('layouts.app')
 
 @section('content')
 <div class="container">
@@ -62,4 +62,61 @@
         </div>
     </div>
 </div>
+@endsection --}}
+@extends('layouts.app')
+@section('title', {{ __('Reset Password') }})
+    
+@section('content')
+   
+
+<div class="container">
+        <form class="form" method="POST" action="{{ route('password.update') }}">
+            <h2>{{ __('Reset Password') }}</h2>
+            @csrf
+                <fieldset>
+                    <input type="hidden" name="token" value="{{ $token }}">
+
+
+                    <div class="form-control">
+                        <label for="nameField">{{ __('E-Mail Address') }}</label>
+                        <input type="email" id="email" name="email" class="{{ $errors->has('email') ? ' is-invalid' : '' }}">
+                        @if ($errors->has('email'))
+                            <span class="invalid-feedback" role="alert">
+                                <span>{{ $errors->first('email') }}</span>
+                            </span>
+                        @endif
+                    </div>
+
+                    <div class="form-control">
+                        <label for="nameField">{{ __('Password') }}</label>
+                        <input type="password" id="password" name="password" class="{{ $errors->has('password') ? ' is-invalid' : '' }}">
+                        @if ($errors->has('password'))
+                            <span class="invalid-feedback" role="alert">
+                                <span>{{ $errors->first('password') }}</span>
+                            </span>
+                        @endif
+                    </div>
+
+                    <div class="form-control">
+                            <label for="nameField">{{ __('Confirm Password') }}</label>
+                            <input type="password" id="password-confirm" name="password-confirm" class="{{ $errors->has('password-confirm') ? ' is-invalid' : '' }}">
+                            @if ($errors->has('password-confirm'))
+                                <span class="invalid-feedback" role="alert">
+                                    <span>{{ $errors->first('password-confirm') }}</span>
+                                </span>
+                            @endif
+                        </div>
+
+                   <div class="form-actions">
+
+                        <div class="form-actions-left">
+                            <input class="button-primary" type="submit" value="{{ __('Reset Password') }}">
+                        </div>
+                               
+                   </div> 
+                  
+                </fieldset>
+        </form>
+</div>
+
 @endsection
