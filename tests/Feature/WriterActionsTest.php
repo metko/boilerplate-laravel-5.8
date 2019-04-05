@@ -20,6 +20,7 @@ class WriterActionsTest extends TestCase
     {	
         $user = UserFactory::withRole('writer')->create();
         $post = ['title' => 'new title', 'body' => "new body"];
+        
         $this->actingAs($user)->post('/posts', $post);
         $this->assertDatabaseHas('posts', $post);
     }
@@ -29,7 +30,6 @@ class WriterActionsTest extends TestCase
     {	
         $user = factory(User::class)->create();
         $post = PostFactory::createdBy('writer')->ownedBy($user)->create();
-
         $this->actingAs($user)->delete($post->path())->assertStatus(302);
         $this->assertDatabaseMissing('posts', ['title' =>  $post->title]);
     }
@@ -39,7 +39,6 @@ class WriterActionsTest extends TestCase
     {	
         $user = factory(User::class)->create();
         $post = PostFactory::createdBy('writer')->ownedBy($user)->create();
-
         $this->actingAs($user)
             ->patch($post->path(), ['title' => 'title changed', 'body' => "body changed"])
             ->assertRedirect($post->path());
@@ -52,7 +51,6 @@ class WriterActionsTest extends TestCase
         //$this->withoutExceptionHandling();
         $user = factory(User::class)->create();
         $post = PostFactory::createdBy('writer')->create();
-
         //update post 
         $this->actingAs($user)
             ->patch($post->path(), ['title' => 'title changed', 'body' => "body changed"])

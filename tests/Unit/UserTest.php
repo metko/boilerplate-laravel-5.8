@@ -2,6 +2,7 @@
 
 namespace Tests\Unit;
 
+use App\Post;
 use App\Role;
 use App\User;
 use Tests\TestCase;
@@ -16,15 +17,35 @@ class UserTest extends TestCase
     /** @test */
     public function it_has_a_role()
     {	
-        $user = UserFactory::create();
+        $user = UserFactory::withRole("role-test")->create();
         $this->assertInstanceOf(Role::class, $user->roles->first());
     }
 
     /** @test */
     public function it_can_assign_roles()
     {	
-        $user = UserFactory::withRole('role-test')->create();
+        $role = factory(Role::class)->create(['name' => 'role-test']);
+        $user = UserFactory::create();
+        $user->assignRole("role-test");
         $this->assertEquals("role-test" , $user->roles->first()->name);
+    }
+
+    /** @test */
+    public function it_cannot_assign_twice_the_same_role()
+    {	
+        $this->withoutExceptionHandling();
+        $user = UserFactory::create();
+        $role = factory(Role::class)->create(['name' => 'role-test']);
+        $user->assignRole('role-test');
+        $user->assignRole('role-test');
+        $this->assertCount(1 , $user->roles);
+    }
+
+    /** @test */
+    public function it_has_already()
+    {	
+        $user = UserFactory::withRole('role-test')->create();
+        $this->assertTrue($user->isActually('role-test'));
     }
 
     /** @test */
@@ -32,15 +53,14 @@ class UserTest extends TestCase
     {	
         $user = UserFactory::create();
         $user->assignRole("fake-role");
-        $this->assertCount(2 , $user->roles);
+        $this->assertCount(0 , $user->roles);
     }
 
     /** @test */
     public function it_has_member()
     {	
         $this->withoutExceptionHandling();
-        $role = factory(Role::class)->create(['name' => 'member']);
-        $user = factory(User::class)->create();
+        $user = UserFactory::withRole('member')->create();
         $this->assertTrue($user->isMember());
     }
 
@@ -59,6 +79,15 @@ class UserTest extends TestCase
         $user = UserFactory::withRole('admin')->create();
         $this->assertTrue($user->isAdmin());
     }
-    
+
+    /** @test */
+    public function it_has_posts()
+    {	
+        $this->withoutExceptionHandling();
+        $role = factory(Role::class)->create(['name' => 'member']);
+        $user = UserFactory::withRole('writer')->create();
+        $post = factory(Post::class)->create(['owner_id' => $user->id]);
+        $this->assertInstanceOf(Post::class, $user->posts->first(   ));
+    }
 
 }

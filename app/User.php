@@ -38,33 +38,49 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-
-    public function roles(){
+    public function roles()
+    {
         return $this->belongsToMany(Role::class);
     }
 
-    public function assignRole($role)
+    public function posts()
     {
-        $role = Role::whereName($role)->first() ?? null;
-        return $this->roles()->attach($role);
+        return $this->hasMany(Post::class, 'owner_id');
+    }
+
+    public function assignRole($roleName)
+    { 
+        $role = Role::whereName($roleName)->first() ?? null;
+        if( ! $this->isActually($roleName)){
+            $user =  $this->roles()->attach($role);
+            $this->refresh();
+            return $user;
+        }  
     } 
 
-    public function isMember(){
+    public function isActually($role)
+    {
+        return $this->roles->contains('name', $role);
+    }
+
+    public function isMember()
+    {
         foreach($this->roles as $role){
             return $role->name == 'member';
         }    
     }
 
-    public function isWriter(){
+    public function isWriter()
+    {
         foreach($this->roles as $role){
             return $role->name == 'writer';
         }    
     }
 
-    public function isAdmin(){
+    public function isAdmin()
+    {
         foreach($this->roles as $role){
             return $role->name == 'admin';
         }    
     }
-    
 }

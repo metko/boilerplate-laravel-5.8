@@ -18,7 +18,6 @@ class AdminActionsTest extends TestCase
     public function a_admin_can_create_post(){
         $this->withoutExceptionHandling();
         $user = UserFactory::withRole('admin')->create();
-    
         //update post 
         $this->actingAs($user)
             ->post("/posts", ['title' => 'title', 'body' => "body"]);
@@ -30,7 +29,6 @@ class AdminActionsTest extends TestCase
         $this->withoutExceptionHandling();
         $user = UserFactory::withRole('admin')->create();
         $post = PostFactory::createdBy('writer')->create();
-
         //update post 
         $this->actingAs($user)
             ->patch($post->path(), ['title' => 'title changed', 'body' => "body changed"]);
@@ -47,6 +45,7 @@ class AdminActionsTest extends TestCase
         $this->withoutExceptionHandling();
         $user = UserFactory::withRole('admin')->create();
         $post = PostFactory::createdBy('writer')->create();
+        
         //update post 
         $this->actingAs($user)
             ->post($post->path().'/comments', ['body' => 'Comment from admin']);
@@ -60,6 +59,7 @@ class AdminActionsTest extends TestCase
         $user = UserFactory::withRole('admin')->create();
         $post = PostFactory::createdBy('writer')->create();
         $comment = CommentFactory::withPost($post)->create();
+        
         //update post 
         $this->actingAs($user)
             ->patch( $comment->path(), ['body' => 'Comment changed from admin']);

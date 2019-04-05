@@ -23,19 +23,22 @@ class UserTest extends TestCase
         $this->assertDatabaseMissing('users', ['name' => $attributes['name']]);
     }
 
-
     /** @test */
     public function a_user_can_have_multiple_roles()
     {	
+        $role = factory(Role::class)->create(['name' => 'member']);
+        $role = factory(Role::class)->create(['name' => 'writer']);
+
         $user = UserFactory::create();
+        $user->assignRole('member');
         $user->assignRole('writer');
         $this->assertCount(2, $user->roles);
     }
 
     /** @test */
     public function a_new_user_is_member_by_default()
-    {	        
-        $role = factory(Role::class)->create(['name' => 'member']);
+    {	    
+        $role = factory(Role::class)->create(['name' => 'member']);    
         $attributes = [
             'name' => "toto",
             'email' => 'toto@toto.com',
@@ -45,8 +48,5 @@ class UserTest extends TestCase
         $this->post('register', $attributes);
         $user = User::whereName($attributes['name'])->first();
         $this->assertTrue($user->isMember());
-        
     }
-
-
 }
