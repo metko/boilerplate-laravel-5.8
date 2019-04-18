@@ -13,6 +13,7 @@
          <article>
             <h2>{{$post->title}}  <span class="name"><strong> - {{$post->owner->name}}</strong></span> </h2>
             <p>{{ $post->excerpt() }}</p>
+            <p>Created at: {{ $post->created_at->format('d/m/Y')}}</p>
             <a href="{{ $post->path() }}" class="button-small">Read more</a>
          </article>
          <hr>
