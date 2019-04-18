@@ -22,6 +22,11 @@ class Post extends Model
         return $this->hasMany(Comment::class);
     }
 
+    public function excerpt()
+    {	
+        return \Illuminate\Support\Str::limit($this->body, 150, '...');
+    }
+
     public function addComment($attributes)
     {
         return $this->comments()->create([

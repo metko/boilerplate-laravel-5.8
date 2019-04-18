@@ -22,7 +22,7 @@ class ManagePostTest extends TestCase
         $post1 = PostFactory::create();
         $post2 = PostFactory::create();
         $post3 = PostFactory::create();
-        $this->get(route('posts'))
+        $this->get(route('posts.index'))
                 ->assertSee($post1->title)
                 ->assertSee($post2->title)
                 ->assertSee($post3->title);

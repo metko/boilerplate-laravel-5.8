@@ -17,15 +17,19 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/posts', 'PostController@index')->name('posts');
-Route::get('/posts/create', 'PostController@create');
-Route::get('/posts/{post}', 'PostController@show');
-Route::delete('/posts/{post}', 'PostController@destroy');
-Route::patch('/posts/{post}', 'PostController@update');
-Route::post('/posts', 'PostController@store');
+/** POST ROUTES */
+Route::resource('posts', 'PostController');
+/** END POST ROUTES */
 
-Route::post('/posts/{post}/comments', 'PostCommentsController@store')->middleware('auth');
-Route::patch('/comments/{comment}', 'PostCommentsController@update')->middleware('auth');
-Route::delete('/comments/{comment}', 'PostCommentsController@destroy')->middleware('auth');
+/** POST COMMENTS ROUTES */
+Route::post('/posts/{post}/comments', 'PostCommentsController@store')
+        ->name('posts.comments.store')->middleware('auth');
+
+Route::patch('/comments/{comment}', 'PostCommentsController@update')
+        ->name('posts.comments.update')->middleware('auth');
+
+Route::delete('/comments/{comment}', 'PostCommentsController@destroy')
+        ->name('posts.comments.destroy')->middleware('auth');
+/** END POST COMMENTS ROUTE */
 
 Route::get('/home', 'HomeController@index')->name('home');

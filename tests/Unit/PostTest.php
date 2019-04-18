@@ -41,6 +41,15 @@ class PostTest extends TestCase
     }
 
     /** @test */
+    public function it_has_excerpt()
+    {	
+        $this->withoutExceptionHandling();
+        $this->signIn();
+        $post = factory(Post::class)->create();
+        $this->assertEquals($post->excerpt(), \Illuminate\Support\Str::limit($post->body, 150, '...'));
+    }
+
+    /** @test */
     public function it_can_createPost()
     {	
         $this->signIn();

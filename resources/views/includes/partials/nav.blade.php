@@ -5,7 +5,7 @@
          </div>
          <div>
                <ul>
-                  <li><a href="#">Blog</a></li>
+                  <li><a href="{{ route('posts.index') }}">Blog</a></li>
                </ul>
            </div>
             <div class="nav-links-right">
