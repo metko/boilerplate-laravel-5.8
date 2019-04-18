@@ -29,6 +29,8 @@ class PostController extends Controller
         $this->authorize('create', Post::class);
         $attributes = $this->validateRequest(request());
         $post->createPost($attributes);
+        toast('Comment saved','success','top-right');
+
         return redirect($post->path());
     }
 
@@ -36,6 +38,7 @@ class PostController extends Controller
     {
         $this->authorize('manage', $post);
         $post->update( $this->validateRequest(request()));
+        toast('Post updated','success','top-right');
         return redirect($post->path());
     }
 
@@ -43,8 +46,9 @@ class PostController extends Controller
     {
         $this->authorize('create', Post::class);
         $this->authorize('manage', $post);
-
         $post->delete();
+        toast('Comment destroyed','success','top-right');
+
         return redirect('/posts');
     }
 

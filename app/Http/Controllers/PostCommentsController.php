@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Post;
 use App\Comment;
 use Illuminate\Http\Request;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class PostCommentsController extends Controller
 {
@@ -20,6 +21,8 @@ class PostCommentsController extends Controller
     {
         $attributes = $this->validateRequest($request);
         $comment = $post->addComment($attributes);
+        toast('Comment saved','success','top-right');
+
         return redirect($post->path());
     }
 
@@ -36,6 +39,8 @@ class PostCommentsController extends Controller
         $this->authorize('manage', $comment);
         $attributes = $this->validateRequest($request);
         $comment->update($attributes);
+        toast('Comment updated','success','top-right');
+
         return redirect($comment->post->path());
     }
 
@@ -51,6 +56,7 @@ class PostCommentsController extends Controller
     {
         $this->authorize('manage', $comment);
         $comment->delete();
+        toast('Comment destroyed','success','top-right');
         return redirect($comment->post->path());
     }
 

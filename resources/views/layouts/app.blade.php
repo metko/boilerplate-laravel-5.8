@@ -3,6 +3,7 @@
    @include('includes.partials.head')
     <body>
         <div id="app" class="">
+           @include('sweetalert::alert')
            @include('includes.partials.nav')
 
             <div class="content">
