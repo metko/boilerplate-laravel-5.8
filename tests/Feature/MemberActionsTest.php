@@ -68,7 +68,8 @@ class MemberActionsTest extends TestCase
         $user = UserFactory::create();
         $comment = CommentFactory::createdBy($user)->create();
 
-        $this->actingAs($user)->patch($comment->path(), ['body' => 'Comment changed']);
+        $this->actingAs($user)->patch($comment->path(), ['body' => 'Comment changed'])
+                ->assertRedirect($comment->post->path());
         $this->assertDatabaseHas('comments', ['body' => 'Comment changed']);
     }
 

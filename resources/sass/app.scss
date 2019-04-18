@@ -3,14 +3,30 @@
 
 @import 'variables';
 
-@import 'components/layouts';
-@import 'components/hero';
-@import 'components/buttons';
-@import 'components/form';
+@import 'components/components';
 
 @import 'partials/nav';
+@import 'partials/comments';
 
 @import 'snippets';
+
+
+article .name{
+   font-size: 1.5rem;
+}
+
+.form-edit-comment textarea{
+   width: 100%;
+   margin-bottom: 0;
+}
+.form-edit-comment{
+  margin-bottom: 0;
+  display:flex;
+  button{
+     margin-left: 3rem;
+     margin-top: 13px;
+  }
+}
 
 
 

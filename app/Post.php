@@ -19,7 +19,7 @@ class Post extends Model
 
     public function comments()
     {
-        return $this->hasMany(Comment::class);
+        return $this->hasMany(Comment::class)->latest('id');
     }
 
     public function excerpt()

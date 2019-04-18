@@ -20,6 +20,7 @@ class PostCommentsController extends Controller
     {
         $attributes = $this->validateRequest($request);
         $comment = $post->addComment($attributes);
+        return redirect($post->path());
     }
 
     /**
@@ -35,6 +36,7 @@ class PostCommentsController extends Controller
         $this->authorize('manage', $comment);
         $attributes = $this->validateRequest($request);
         $comment->update($attributes);
+        return redirect($comment->post->path());
     }
 
     /**

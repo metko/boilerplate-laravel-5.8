@@ -11,7 +11,7 @@
    <div class="container">
       @forelse($posts as $post)
          <article>
-            <h2>{{$post->title}}</h2>
+            <h2>{{$post->title}}  <span class="name"><strong> - {{$post->owner->name}}</strong></span> </h2>
             <p>{{ $post->excerpt() }}</p>
             <a href="{{ $post->path() }}" class="button-small">Read more</a>
          </article>

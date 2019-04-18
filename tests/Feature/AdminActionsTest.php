@@ -48,7 +48,8 @@ class AdminActionsTest extends TestCase
         
         //update post 
         $this->actingAs($user)
-            ->post($post->path().'/comments', ['body' => 'Comment from admin']);
+            ->post($post->path().'/comments', ['body' => 'Comment from admin'])
+            ->assertRedirect($post->path());
         $this->assertDatabaseHas('comments', ['body' => 'Comment from admin']);  
     }
 
@@ -62,7 +63,7 @@ class AdminActionsTest extends TestCase
         
         //update post 
         $this->actingAs($user)
-            ->patch( $comment->path(), ['body' => 'Comment changed from admin']);
+            ->patch( $comment->path(), ['body' => 'Comment changed from admin'])->assertRedirect($post->path());
         $this->assertDatabaseHas('comments', ['body' => 'Comment changed from admin']);  
     }
 

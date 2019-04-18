@@ -68,7 +68,8 @@ class WriterActionsTest extends TestCase
         $this->withoutExceptionHandling();
         $user = UserFactory::withRole('writer')->create();
         $post = PostFactory::create();
-        $this->actingAs($user)->post($post->path().'/comments', ['body' => 'this is a com from a writer']);
+        $this->actingAs($user)->post($post->path().'/comments', ['body' => 'this is a com from a writer'])
+                ->assertRedirect($post->path());
         $this->assertDatabaseHas('comments', ['body' => 'this is a com from a writer']);
         $this->assertCount(1, $post->comments);
     }
@@ -98,7 +99,8 @@ class WriterActionsTest extends TestCase
         $user = UserFactory::withRole('writer')->create();
         $post = PostFactory::ownedBy($user)->create();
         $comment = CommentFactory::withPost($post)->create();
-        $this->actingAs($user)->delete($comment->path());
+        $this->actingAs($user)->delete($comment->path())
+                ->assertRedirect($post->path());
         $this->assertDatabaseMissing('comments', $comment->toArray());
     }
 
@@ -109,7 +111,8 @@ class WriterActionsTest extends TestCase
         $user = UserFactory::withRole('writer')->create();
         $post = PostFactory::ownedBy($user)->create();
         $comment = CommentFactory::withPost($post)->create();
-        $this->actingAs($user)->patch($comment->path(), ['body' => 'lalala']);
+        $this->actingAs($user)->patch($comment->path(), ['body' => 'lalala'])
+                ->assertRedirect($post->path());
         $this->assertDatabaseHas('comments', ['body' => 'lalala']);
     }
  

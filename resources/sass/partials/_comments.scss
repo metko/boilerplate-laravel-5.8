@@ -1,0 +1,22 @@
+.comments{
+   .card{
+      margin-bottom: 3rem;
+      display: flex;
+      align-items: center;
+   }
+   .content{
+      width: 90%;
+   }
+   .content span{
+      display: block;
+      &.name{
+         font-weight: 700;
+      }
+   }
+   .actions{
+      margin-left: auto;
+      .button-small, .button-small-outline{
+         margin-bottom: 0;
+      }
+   }
+}

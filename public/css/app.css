@@ -1152,6 +1152,14 @@ img {
     max-width: 60%;
   }
 }
+.card {
+  max-width: 100%;
+  margin: 0 auto;
+  background: #f4f5f685;
+  padding: 2rem 3rem !important;
+  border-radius: 0.5rem;
+}
+
 nav {
   width: 100%;
   display: flex;
@@ -1177,6 +1185,27 @@ nav ul li {
   padding-right: 0;
 }
 
+.comments .card {
+  margin-bottom: 3rem;
+  display: flex;
+  align-items: center;
+}
+.comments .content {
+  width: 90%;
+}
+.comments .content span {
+  display: block;
+}
+.comments .content span.name {
+  font-weight: 700;
+}
+.comments .actions {
+  margin-left: auto;
+}
+.comments .actions .button-small, .comments .actions .button-small-outline {
+  margin-bottom: 0;
+}
+
 .np {
   padding: 0;
 }
@@ -1187,4 +1216,22 @@ nav ul li {
 
 .text-center {
   text-align: center;
+}
+
+article .name {
+  font-size: 1.5rem;
+}
+
+.form-edit-comment textarea {
+  width: 100%;
+  margin-bottom: 0;
+}
+
+.form-edit-comment {
+  margin-bottom: 0;
+  display: flex;
+}
+.form-edit-comment button {
+  margin-left: 3rem;
+  margin-top: 13px;
 }

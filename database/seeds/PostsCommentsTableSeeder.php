@@ -29,7 +29,12 @@ class PostsCommentsTableSeeder extends Seeder
                 'post_id' => 3
             ]);
         }
-
+        for($i = 1; $i <= 3; $i++ ){
+            factory(App\Comment::class)->create([
+                'owner_id' => 1,
+                'post_id' => $i
+            ]);
+        }
         for($i = 1; $i <= 3; $i++ ){
             factory(App\Comment::class)->create([
                 'owner_id' => 2,
