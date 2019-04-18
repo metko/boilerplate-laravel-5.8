@@ -31,6 +31,10 @@ class UsersTableSeeder extends Seeder
                 $user->assignRole($role[1]);
             }
         }
+
+        factory(User::class, 4)->create()->each(function ($user) {
+            $user->assignRole('member');
+        });
        
     }
 }

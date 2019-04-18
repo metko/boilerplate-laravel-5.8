@@ -15,7 +15,8 @@ class PostsTableSeeder extends Seeder
     {
         for($i = 2; $i <= 4; $i++ ){
            factory(Post::class)->create(['owner_id' => $i]);
-        }     
+        }   
+        
         
     }
 }

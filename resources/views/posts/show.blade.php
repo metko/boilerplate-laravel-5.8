@@ -11,6 +11,16 @@
 
       <div class="container">
             <p>{{$post->body}}</p>
+            <hr>
+            <h3>Comments</h3>
+            @forelse ($post->comments as $comment)
+                  <div class="card">
+                        <p> {{ $comment->body}}</p>
+                        By: {{ $comment->owner->name}}
+                  </div>
+            @empty
+                  <h3>0 comments for the moments</h3>
+            @endforelse
       </div>
      
 @endsection
