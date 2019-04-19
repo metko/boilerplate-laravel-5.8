@@ -25,7 +25,7 @@ class UserFactory{
       
    }
 
-   public function create(){
+   public function create($attributes = []){
 
       
       if($this->role){
@@ -37,7 +37,7 @@ class UserFactory{
       
 
 
-      $user = factory(User::class)->create();
+      $user = factory(User::class)->create($attributes);
 
       if($this->role){
          $user->assignRole($this->role);

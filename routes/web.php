@@ -17,6 +17,18 @@ Route::get('/', function () {
 
 Auth::routes();
 
+Route::get('admin/login', 'Admin\Auth\LoginController@showLoginForm')->name('admin.showLoginForm');
+Route::post('admin/login', 'Admin\Auth\LoginController@login')->name('admin.login');
+
+/**ADMIN  ROUTES */
+Route::group(['middleware' => ['onlyAdmin']], function() {
+        Route::prefix('admin')->namespace('Admin')->name('admin.')->group(function () {
+                Route::get('/', 'AdminController@index')->name('dashboard');
+        });
+});
+
+/** END ADMLIN ROURES */
+
 /** POST ROUTES */
 Route::resource('posts', 'PostController');
 /** END POST ROUTES */
