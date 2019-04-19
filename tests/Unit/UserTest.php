@@ -81,13 +81,21 @@ class UserTest extends TestCase
     }
 
     /** @test */
+    public function it_has_superAdmin()
+    {	
+        $this->withoutExceptionHandling();
+        $user = UserFactory::withRole('super-admin')->create();
+        $this->assertTrue($user->isSuperAdmin());
+    }
+
+    /** @test */
     public function it_has_posts()
     {	
         $this->withoutExceptionHandling();
         $role = factory(Role::class)->create(['name' => 'member']);
         $user = UserFactory::withRole('writer')->create();
         $post = factory(Post::class)->create(['owner_id' => $user->id]);
-        $this->assertInstanceOf(Post::class, $user->posts->first(   ));
+        $this->assertInstanceOf(Post::class, $user->posts->first());
     }
     
     /** @test */

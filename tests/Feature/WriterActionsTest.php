@@ -115,5 +115,17 @@ class WriterActionsTest extends TestCase
                 ->assertRedirect($post->path());
         $this->assertDatabaseHas('comments', ['body' => 'lalala']);
     }
+
+    /** @test */
+    public function a_writer_can_access_to_manage_posts_page()
+    {	
+        $this->withoutExceptionHandling();
+        $user = UserFactory::withRole('writer')->create();
+        $post = PostFactory::ownedBy($user)->create();
+        $post = PostFactory::createdBy('admin')->create();
+        $this->actingAs($user)->get(route('manage.posts'))->assertSee($post->title)->assertStatus(200);
+    }
+
+
  
 }

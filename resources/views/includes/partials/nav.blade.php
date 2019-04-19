@@ -6,6 +6,9 @@
          <div>
                <ul>
                   <li><a href="{{ route('posts.index') }}">Blog</a></li>
+                  @hasPosts
+                        <li><a href="{{ route('manage.posts') }}">My posts</a></li>
+                  @endhasPosts
                </ul>
            </div>
             <div class="nav-links-right">
@@ -21,21 +24,19 @@
                         @endif
                   @else
                         <li class="nav-item dropdown">
-                              <a >
-                                    {{ Auth::user()->name }}
-                              </a>
+                            
+                              {{ Auth::user()->name }}
+                             
 
-                              <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ route('logout') }}"
+                              <a class="dropdown-item" href="{{ route('logout') }}"
                                     onclick="event.preventDefault();
                                     document.getElementById('logout-form').submit();">
                                     {{ __('Logout') }}
-                                    </a>
+                              </a>
 
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                          @csrf
-                                    </form>
-                              </div>
+                              <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                    @csrf
+                              </form>
                         </li>
                   @endguest
             </ul>

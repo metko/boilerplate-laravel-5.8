@@ -98,5 +98,14 @@ class MemberActionsTest extends TestCase
         $this->assertTrue($post->comments->contains($comment));
     }
 
+    /** @test */
+    public function a_member_cant_see_manage_posts_page()
+    {	
+        //$this->withoutExceptionHandling();
+        $member = UserFactory::create();
+        $post = PostFactory::create();
+        $this->actingAs($member)->get(route('manage.posts'))->assertStatus(403);
+    }
+
 
 }

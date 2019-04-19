@@ -7,6 +7,14 @@
             <div class="container-nm">
                   <h1>{{$post->title}}</h1>
                   <span> <strong>{{$post->owner->name}}</strong></span>
+                  @can('manage', $post)
+                        <a href="{{ route('posts.edit', $post->id) }}" class="button-small-outline">Edit</a>
+                        <form action="{{ route('posts.destroy', $post->id) }}" method='POST' style="display: inline">
+                              @csrf
+                              @method('DELETE')
+                              <button type="submit" class="button-small">Delete</button>
+                        </form>
+                  @endcan
             </div>
       </div>
 
@@ -14,6 +22,11 @@
             <p>{{$post->body}}</p>
             <hr>
             <h3>{{ $post->comments->count() }} comments</h3>
+            <form action="{{ $post->path() . '/comments' }}" method="POST">
+                  @csrf
+                  <textarea name="body" id="" ></textarea>
+                  <button type="submit" class="button">Save comment</button>
+            </form>
             <div class="comments">
                   @forelse ($post->comments as $comment)
                         <div class="card">

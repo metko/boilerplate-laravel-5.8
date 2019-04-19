@@ -9,11 +9,11 @@ use App\Role;
 
 class PostFactory{
 
-   protected $role = "member";
+   protected $defaultRole = "writer";
 
    public function createdBy($role){
       
-      $this->role = $role;
+      $this->defaultRole = $role;
       return $this;
       
    }
@@ -28,7 +28,7 @@ class PostFactory{
    public function create(){
 
       factory(Role::class)->create([
-         'name' => $this->role
+         'name' => $this->defaultRole
       ]);
 
       $user = $this->user ?? factory(User::class)->create();
@@ -37,7 +37,7 @@ class PostFactory{
          'owner_id' => $user->id
       ]);
       
-      $user->assignRole($this->role);
+      $user->assignRole($this->defaultRole);
 
       
 

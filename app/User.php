@@ -84,6 +84,13 @@ class User extends Authenticatable
         }    
     }
 
+    public function isSuperAdmin()
+    {
+        foreach($this->roles as $role){
+            return $role->name == 'super-admin';
+        }   
+    }
+
     public function gravatar()
     {
         return 'https://www.gravatar.com/avatar/' . md5($this->email) . '?d=mm&s=100';

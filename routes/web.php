@@ -31,6 +31,11 @@ Route::group(['middleware' => ['onlyAdmin']], function() {
 
 /** POST ROUTES */
 Route::resource('posts', 'PostController');
+Route::group(['middleware' => ['can:create,App\Post']], function() {
+        Route::prefix('manage')->name('manage.')->group(function () {
+                Route::get('posts', 'PostController@managePosts')->name('posts');
+        });
+});
 /** END POST ROUTES */
 
 /** POST COMMENTS ROUTES */
