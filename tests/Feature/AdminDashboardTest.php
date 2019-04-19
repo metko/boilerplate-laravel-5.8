@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Post;
 use App\User;
 use Tests\TestCase;
 use Facades\Tests\Setup\UserFactory;
@@ -55,5 +56,24 @@ class AdminDashboardTest extends TestCase
         $this->actingAs($writer)->get(route('admin.dashboard'))->assertStatus(302);
         $this->actingAs($admin)->get(route('admin.dashboard'))->assertStatus(200);
         // $this->actingAs($superAdmin)->get(route('admin.dashboard'))->assertStatus(200);
+    }
+
+
+    /** @test */
+    public function it_show_count_of_posts()
+    {	
+        $this->withoutExceptionHandling();
+        $admin = UserFactory::withRole('admin')->create();
+        $posts = factory(Post::class, 10)->create();
+        $this->actingAs($admin)->get(route('admin.dashboard'))->assertSee('10');
+    }
+
+    /** @test */
+    public function it_show_count_of_users()
+    {	
+        $this->withoutExceptionHandling();
+        $admin = UserFactory::withRole('admin')->create();
+        $users = factory(User::class, 123)->create();
+        $this->actingAs($admin)->get(route('admin.dashboard'))->assertSee('124');
     }
 }

@@ -83,4 +83,9 @@ class User extends Authenticatable
             return $role->name == 'admin';
         }    
     }
+
+    public function gravatar()
+    {
+        return 'https://www.gravatar.com/avatar/' . md5($this->email) . '?d=mm&s=100';
+    }
 }

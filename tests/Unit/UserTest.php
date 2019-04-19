@@ -89,5 +89,13 @@ class UserTest extends TestCase
         $post = factory(Post::class)->create(['owner_id' => $user->id]);
         $this->assertInstanceOf(Post::class, $user->posts->first(   ));
     }
+    
+    /** @test */
+    public function it_has_gravatar()
+    {	
+        $this->withoutExceptionHandling();
+        $user = UserFactory::withRole('writer')->create(); 
+        $this->assertEquals($user->gravatar(), 'https://www.gravatar.com/avatar/' . md5($user->email) . '?d=mm&s=100');
+    }
 
 }

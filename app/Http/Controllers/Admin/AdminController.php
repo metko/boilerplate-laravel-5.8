@@ -16,6 +16,7 @@ class AdminController extends Controller
             'users' => User::count()
         ];
         $posts = Post::latest()->take(5)->get();
-        return view('admin.home', compact(['count', 'posts']));
+        $users = User::latest()->take(5)->get();
+        return view('admin.home', compact(['count', 'posts', 'users']));
     }
 }
