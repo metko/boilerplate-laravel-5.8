@@ -14,7 +14,7 @@
 
       <!-- CSS Libraries -->
       {{-- <link rel="stylesheet" href="css/style.css"> --}}
-      <link rel="stylesheet" href="css/components.css"> 
+      {{-- <link rel="stylesheet" href="css/components.css">  --}}
       
       <!-- Styles -->
       <link href="{{ asset('css/admin.app.css') }}" rel="stylesheet">

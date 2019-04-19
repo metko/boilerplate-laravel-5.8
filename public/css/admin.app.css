@@ -678,6 +678,10 @@ select.form-control:not([size]):not([multiple]) {
   opacity: 1;
 }
 
+form .invalid-feedback {
+  display: block !important;
+}
+
 /* 3.3 List */
 
 .list-unstyled-border li {

@@ -1,37 +1,48 @@
 
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+
 @include('admin.partials.head')
 
 
 <body>
   <div id="app">
+    @include('sweetalert::alert')
     <div class="main-wrapper">
-      <div class="navbar-bg"></div>
-      <nav class="navbar navbar-expand-lg main-navbar">
-        <form class="form-inline mr-auto">
-          <ul class="navbar-nav mr-3">
-            <li><a href="#" data-toggle="sidebar" class="nav-link nav-link-lg"><i class="fas fa-bars"></i></a></li>
-            <!-- <li><a href="#" data-toggle="search" class="nav-link nav-link-lg d-sm-none"><i class="fas fa-search"></i></a></li> -->
+     
+      @admin
+        <div class="navbar-bg"></div>
+        <nav class="navbar navbar-expand-lg main-navbar">
+          <form class="form-inline mr-auto">
+            <ul class="navbar-nav mr-3">
+              <li><a href="#" data-toggle="sidebar" class="nav-link nav-link-lg"><i class="fas fa-bars"></i></a></li>
+              <!-- <li><a href="#" data-toggle="search" class="nav-link nav-link-lg d-sm-none"><i class="fas fa-search"></i></a></li> -->
+            </ul>
+            @include('admin/partials/search-form')
+          </form>
+          <ul class="navbar-nav navbar-right">
+            @include('admin/partials/messages')
+            @include('admin/partials/notifications')
+            @include('admin/partials/user')
           </ul>
-          @include('admin/partials/search-form')
-        </form>
-        <ul class="navbar-nav navbar-right">
-          @include('admin/partials/messages')
-          @include('admin/partials/notifications')
-          @include('admin/partials/user')
-        </ul>
-      </nav>
+        </nav>
+      
 
-      @include('admin/partials/sidebar')
+        @include('admin/partials/sidebar')
+      
+        <!-- Main Content -->
+        <div class="main-content">
+      @endadmin
 
-      <!-- Main Content -->
-      <div class="main-content">
         <section class="section">
           @yield('content')
         </section>
-      </div>
-      @include('admin.partials/footer')
+
+      @admin
+        </div>
+        @include('admin.partials/footer')
+      @endadmin
+      
     </div>
   </div>
 
