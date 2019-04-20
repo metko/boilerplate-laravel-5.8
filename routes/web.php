@@ -17,16 +17,30 @@ Route::get('/', function () {
 
 Auth::routes();
 
+/**USERS ROUTES */
+Route::group(['middleware' => ['auth']], function() {
+        Route::delete('users', 'UsersController@destroy')->name('users.destroy');
+        Route::patch('users/update', 'UsersController@update')->name('users.update');
+        Route::patch('users/updatePassword', 'UsersController@updatePassword')->name('users.update.password');
+        Route::get('users/updatePassword', 'UsersController@updatePassword')->name('users.edit.password');
+});
+/**END USER ROUTES */
+
+/**ADMIN  ROUTES */
 Route::get('admin/login', 'Admin\Auth\LoginController@showLoginForm')->name('admin.showLoginForm');
 Route::post('admin/login', 'Admin\Auth\LoginController@login')->name('admin.login');
 
-/**ADMIN  ROUTES */
 Route::group(['middleware' => ['onlyAdmin']], function() {
         Route::prefix('admin')->namespace('Admin')->name('admin.')->group(function () {
+
                 Route::get('/', 'AdminController@index')->name('dashboard');
+
+                Route::patch('users/{user}', 'UsersController@update')->name('users.update');
+                Route::patch('users/password/{user}', 'UsersController@updatePassword')->name('users.update.password');
+                Route::delete('users/{user}', 'UsersController@destroy')->name('users.destroy');
+
         });
 });
-
 /** END ADMLIN ROURES */
 
 /** POST ROUTES */

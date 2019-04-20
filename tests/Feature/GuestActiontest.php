@@ -3,10 +3,11 @@
 namespace Tests\Feature;
 
 use Tests\TestCase;
+use Facades\Tests\Setup\PostFactory;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class GuestActiontest extends TestCase
+class GuestActionTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -27,10 +28,23 @@ class GuestActiontest extends TestCase
     {	
         //$this->withoutExceptionHandling();
         $post = PostFactory::create();
-        
-        $this->post($post->path().'/comments', ['body' => 'This is a comment', 'post_id' => $post->id]);
-        $this->assertDatabaseMissing('comments', ['body' => 'This is a comment'])
-                ->assert->status(302);  
+
+        $this->post($post->path().'/comments', ['body' => 'This is a comment', 'post_id' => $post->id])
+                    ->assertStatus(302);
+        $this->assertDatabaseMissing('comments', ['body' => 'This is a comment']);
+               
+    }
+
+    /** @test */
+    public function a_guest_cannot_update_accounts()
+    {	
+        //$this->withoutExceptionHandling();
+        $attributes = [
+            'email' => 'new@mail.com',
+            'name' => 'new name'
+        ];
+        $this->patch( route('users.update', $attributes))->assertStatus(302);  
+        $this->assertDatabaseMissing('users', $attributes);
     }
     
 }

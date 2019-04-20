@@ -3,9 +3,10 @@
 namespace Tests\Feature;
 
 use Tests\TestCase;
-use Facades\Tests\Setup\CommentFactory;
 use Facades\Tests\Setup\PostFactory;
 use Facades\Tests\Setup\UserFactory;
+use Illuminate\Support\Facades\Hash;
+use Facades\Tests\Setup\CommentFactory;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -66,5 +67,103 @@ class AdminActionsTest extends TestCase
             ->patch( $comment->path(), ['body' => 'Comment changed from admin'])->assertRedirect($post->path());
         $this->assertDatabaseHas('comments', ['body' => 'Comment changed from admin']);  
     }
+
+    /** @test */
+    public function a_admin_can_update_his_info()
+    {	
+        $this->withoutExceptionHandling();
+        $admin = UserFactory::withRole('admin')->create();
+        $attributes = [
+            'email' => 'new@mail.com',
+            'name' => 'new name'
+        ];
+        $this->actingAs($admin)->patch(route('admin.users.update', $admin->id), $attributes);
+        $this->assertDatabasehas('users', [
+            'name' => $attributes['name'],
+            'email'=> $attributes['email']
+        ]);
+    }
+    /** @test */
+    public function a_admin_can_update_his_password()
+    {	
+        $this->withoutExceptionHandling();
+        $admin = UserFactory::withRole('admin')->create(['password' => Hash::make('oldpassword')]);
+        $attributes = [
+            'old_password' => 'oldpassword',
+            'password' => 'newpassworddd',
+            'password_confirmation' => 'newpassworddd'
+        ];
+        $this->actingAs($admin)->patch(route('admin.users.update.password',$admin->id), $attributes)
+            ->assertSessionHasNoErrors(['old_password']);
+        $this->assertDatabasehas('users', [
+            'password' => $attributes['password'],
+        ]);
+        
+    }
+
+    /** @test */
+    public function a_admin_cannot_update_his_password_without_oldpassword_confirmation()
+    {	
+        $this->withoutExceptionHandling();
+        $admin = UserFactory::withRole('admin')->create(['password' => Hash::make('oldpassssword')]);
+        $attributes = [
+            'old_password' => 'oldpassword',
+            'password' => 'newpassworddd',
+            'password_confirmation' => 'newpassworddd'
+        ];
+        $this->actingAs($admin)->patch(route('admin.users.update.password',$admin->id), $attributes)
+            ->assertSessionHasErrors(['old_password']);
+        $this->assertDatabaseMissing('users', [
+            'password' => $attributes['password'],
+        ]);
+        
+    }
+
+    
+
+    /** @test */
+    public function a_admin_can_update_infos_of_others_account()
+    {	
+        $this->withoutExceptionHandling();
+        $admin = UserFactory::withRole('admin')->create();
+        $member = UserFactory::withRole('member')->create();
+        $attributes = [
+            'email' => 'new@mail.com',
+            'name' => 'new name'
+        ];
+        $this->actingAs($admin)->patch(route('admin.users.update', $member->id) , $attributes );
+        $this->assertDatabasehas('users', [
+            'name' => $attributes['name'],
+            'email'=> $attributes['email']
+        ]);
+    }
+
+    /** @test */
+    public function a_admin_can_update_password_of_others_account()
+    {	
+        $this->withoutExceptionHandling();
+        $admin = UserFactory::withRole('admin')->create();
+        $writer = UserFactory::withRole('writer')->create(['password' => Hash::make('oldpassword')]);
+        $attributes = [
+            'old_password' => 'oldpassword',
+            'password' => 'newpassworddd',
+            'password_confirmation' => 'newpassworddd'
+        ];
+        $this->actingAs($admin)->patch(route('admin.users.update.password', $writer->id), $attributes);
+        $this->assertDatabasehas('users', [
+            'password' => $attributes['password'],
+        ]);
+    }
+
+    /** @test */
+    public function a_admin_can_delete_accounts()
+    {	
+        $this->withoutExceptionHandling();
+        $writer = UserFactory::withRole('writer')->create();
+        $admin = UserFactory::withRole('admin')->create();
+        $this->actingAs($admin)->delete(route('admin.users.destroy', $writer->id));
+        $this->assertDatabaseMissing('users', ['name' => $writer->name]);
+    }
+
 
 }

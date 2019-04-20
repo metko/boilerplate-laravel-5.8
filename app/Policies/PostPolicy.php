@@ -12,7 +12,9 @@ class PostPolicy
     
     public function before(User $user)
     {
+       
         if($user->isAdmin() || $user->isSuperAdmin()){
+            
             return true;
         }
     }

@@ -15,34 +15,22 @@ class UserFactory{
 
    public function withRole($role = null){
       
-      if($role){
-         $this->role = $role;
-      }else{
-         $this->role = $this->defaultRole;
-      }
-
+      $this->role = $role;
       return $this;
       
    }
 
    public function create($attributes = []){
 
+     $role = $this->role ?? $this->defaultRole;
       
-      if($this->role){
-         
-         factory(Role::class)->create([
-            'name' => $this->role
-         ]);
-      }
       
-
-
+      factory(Role::class)->create([
+         'name' => $role
+      ]);
+      
       $user = factory(User::class)->create($attributes);
-
-      if($this->role){
-         $user->assignRole($this->role);
-         
-      }
+      $user->assignRole($role);
       return $user;
    }
 }

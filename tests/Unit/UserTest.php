@@ -34,9 +34,7 @@ class UserTest extends TestCase
     public function it_cannot_assign_twice_the_same_role()
     {	
         $this->withoutExceptionHandling();
-        $user = UserFactory::create();
-        $role = factory(Role::class)->create(['name' => 'role-test']);
-        $user->assignRole('role-test');
+        $user = UserFactory::withRole('role-test')->create();
         $user->assignRole('role-test');
         $this->assertCount(1 , $user->roles);
     }
@@ -51,9 +49,9 @@ class UserTest extends TestCase
     /** @test */
     public function it_cant_assign_roles_that_doesnt_exists()
     {	
-        $user = UserFactory::create();
+        $user = UserFactory::withRole('member')->create();
         $user->assignRole("fake-role");
-        $this->assertCount(0 , $user->roles);
+        $this->assertCount(1 , $user->roles);
     }
 
     /** @test */
@@ -84,7 +82,7 @@ class UserTest extends TestCase
     public function it_has_superAdmin()
     {	
         $this->withoutExceptionHandling();
-        $user = UserFactory::withRole('super-admin')->create();
+        $user = UserFactory::withRole('super_admin')->create();
         $this->assertTrue($user->isSuperAdmin());
     }
 

@@ -3,9 +3,10 @@
 namespace Tests\Feature;
 
 use Tests\TestCase;
-use Facades\Tests\Setup\CommentFactory;
 use Facades\Tests\Setup\PostFactory;
 use Facades\Tests\Setup\UserFactory;
+use Illuminate\Support\Facades\Hash;
+use Facades\Tests\Setup\CommentFactory;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -106,6 +107,64 @@ class MemberActionsTest extends TestCase
         $post = PostFactory::create();
         $this->actingAs($member)->get(route('manage.posts'))->assertStatus(403);
     }
+
+    /** @test */
+    public function a_member_can_delete_his_account()
+    {	
+        $this->withoutExceptionHandling();
+       
+        $member = UserFactory::create();
+        $this->actingAs($member)->delete(route('users.destroy'));
+        $this->assertDatabaseMissing('users',['name' => $member->name]);
+    }
+
+    /** @test */
+    public function a_member_can_update_his_info()
+    {	
+        $this->withoutExceptionHandling();
+        $member = UserFactory::create();
+        $attributes = [
+            'email' => 'new@mail.com',
+            'name' => 'new name'
+        ];
+        $this->actingAs($member)->patch(route('users.update', $attributes));
+        $this->assertDatabasehas('users', [
+            'name' => $attributes['name'],
+            'email'=> $attributes['email']
+        ]);
+    }
+    /** @test */
+    public function a_member_can_update_his_password()
+    {	
+        $this->withoutExceptionHandling();
+        $member = UserFactory::create(['password' => Hash::make('oldpassword')]);
+        $attributes = [
+            'old_password' => 'oldpassword',
+            'password' => 'newpassworddd',
+            'password_confirmation' => 'newpassworddd'
+        ];
+        $this->actingAs($member)->patch(route('users.update.password', $attributes));
+        $this->assertDatabasehas('users', [
+            'password' => $attributes['password'],
+        ]);
+    }
+
+    /** @test */
+    public function a_member_can_update_his_password_with_the_old_password_confirmation()
+    {	
+        $this->withoutExceptionHandling();
+        $member = UserFactory::create(['password' => Hash::make('oldpasswordfake')]);
+        $attributes = [
+            'old_password' => 'oldpassword',
+            'password' => 'newpassworddd',
+            'password_confirmation' => 'newpassworddd'
+        ];
+        $this->actingAs($member)->patch(route('users.update.password', $attributes))
+                ->assertSessionHasErrors(['old_password']);
+    }
+
+    
+   
 
 
 }

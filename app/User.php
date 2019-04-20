@@ -87,7 +87,7 @@ class User extends Authenticatable
     public function isSuperAdmin()
     {
         foreach($this->roles as $role){
-            return $role->name == 'super-admin';
+            return $role->name == 'super_admin';
         }   
     }
 

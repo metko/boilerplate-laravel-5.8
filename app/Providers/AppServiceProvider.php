@@ -28,7 +28,7 @@ class AppServiceProvider extends ServiceProvider
     {
         User::observe(UserObserver::class);
         Blade::if('admin', function () {
-            return auth()->check() && auth()->user()->isAdmin();
+            return auth()->check() && ( auth()->user()->isAdmin() ||  auth()->user()->isSuperAdmin()) ;
         });
         Blade::if('hasPosts', function () {
             return auth()->check() && ! auth()->user()->isMember();

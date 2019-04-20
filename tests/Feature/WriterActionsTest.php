@@ -5,9 +5,10 @@ namespace Tests\Feature;
 use App\Post;
 use App\User;
 use Tests\TestCase;
-use Facades\Tests\Setup\CommentFactory;
 use Facades\Tests\Setup\PostFactory;
 use Facades\Tests\Setup\UserFactory;
+use Illuminate\Support\Facades\Hash;
+use Facades\Tests\Setup\CommentFactory;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -125,6 +126,53 @@ class WriterActionsTest extends TestCase
         $post = PostFactory::createdBy('admin')->create();
         $this->actingAs($user)->get(route('manage.posts'))->assertSee($post->title)->assertStatus(200);
     }
+
+    /** @test */
+    public function a_writer_can_update_his_info()
+    {	
+        $this->withoutExceptionHandling();
+        $member = UserFactory::withRole('writer')->create();
+        $attributes = [
+            'email' => 'new@mail.com',
+            'name' => 'new name'
+        ];
+        $this->actingAs($member)->patch(route('users.update', $attributes));
+        $this->assertDatabasehas('users', [
+            'name' => $attributes['name'],
+            'email'=> $attributes['email']
+        ]);
+    }
+    /** @test */
+    public function a_writer_can_update_his_password()
+    {	
+        $this->withoutExceptionHandling();
+        $member = UserFactory::withRole('writer')->create(['password' => Hash::make('oldpassword')]);
+        $attributes = [
+            'old_password' => 'oldpassword',
+            'password' => 'newpassworddd',
+            'password_confirmation' => 'newpassworddd'
+        ];
+        $this->actingAs($member)->patch(route('users.update.password', $attributes));
+        $this->assertDatabasehas('users', [
+            'password' => $attributes['password'],
+        ]);
+    }
+
+    /** @test */
+    public function a_member_can_update_his_password_with_the_old_password_confirmation()
+    {	
+        $this->withoutExceptionHandling();
+        $member = UserFactory::withRole('writer')->create(['password' => Hash::make('oldpasswordfake')]);
+        $attributes = [
+            'old_password' => 'oldpassword',
+            'password' => 'newpassworddd',
+            'password_confirmation' => 'newpassworddd'
+        ];
+        $this->actingAs($member)->patch(route('users.update.password', $attributes))
+                ->assertSessionHasErrors(['old_password']);
+    }
+
+    
 
 
  
