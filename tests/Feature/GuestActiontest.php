@@ -43,7 +43,7 @@ class GuestActionTest extends TestCase
             'email' => 'new@mail.com',
             'name' => 'new name'
         ];
-        $this->patch( route('profil.update', $attributes))->assertStatus(302);  
+        $this->patch( route('profile.update', $attributes))->assertStatus(302);  
         $this->assertDatabaseMissing('users', $attributes);
     }
     

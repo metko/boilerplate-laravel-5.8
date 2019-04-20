@@ -136,7 +136,7 @@ class WriterActionsTest extends TestCase
             'email' => 'new@mail.com',
             'name' => 'new name'
         ];
-        $this->actingAs($member)->patch(route('profil.update', $attributes));
+        $this->actingAs($member)->patch(route('profile.update', $attributes));
         $this->assertDatabasehas('users', [
             'name' => $attributes['name'],
             'email'=> $attributes['email']
@@ -152,7 +152,7 @@ class WriterActionsTest extends TestCase
             'password' => 'newpassworddd',
             'password_confirmation' => 'newpassworddd'
         ];
-        $this->actingAs($member)->patch(route('profil.update.password', $attributes));
+        $this->actingAs($member)->patch(route('profile.update.password', $attributes));
         $this->assertDatabasehas('users', [
             'password' => $attributes['password'],
         ]);
@@ -168,7 +168,7 @@ class WriterActionsTest extends TestCase
             'password' => 'newpassworddd',
             'password_confirmation' => 'newpassworddd'
         ];
-        $this->actingAs($member)->patch(route('profil.update.password', $attributes))
+        $this->actingAs($member)->patch(route('profile.update.password', $attributes))
                 ->assertSessionHasErrors(['old_password']);
     }
 
