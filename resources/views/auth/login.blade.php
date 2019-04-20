@@ -12,7 +12,7 @@
 
                     <div class="form-control">
                         <label for="nameField">{{ __('E-Mail Address') }}</label>
-                        <input type="email" id="email" name="email" class="{{ $errors->has('email') ? ' is-invalid' : '' }}">
+                        <input value='{{ old('email') }}' type="email" id="email" name="email" class="{{ $errors->has('email') ? ' is-invalid' : '' }}">
                         @if ($errors->has('email'))
                             <span class="invalid-feedback" role="alert">
                                 <span>{{ $errors->first('email') }}</span>

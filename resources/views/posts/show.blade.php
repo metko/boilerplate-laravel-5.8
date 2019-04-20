@@ -22,18 +22,20 @@
             <p>{{$post->body}}</p>
             <hr>
             <h3>{{ $post->comments->count() }} comments</h3>
+            @can('create', App\Comment::class)
             <form action="{{ $post->path() . '/comments' }}" method="POST">
                   @csrf
                   <textarea name="body" id="" ></textarea>
                   <button type="submit" class="button">Save comment</button>
             </form>
+            @endcan
             <div class="comments">
                   @forelse ($post->comments as $comment)
                         <div class="card">
                               <div class="content">
                                     <span class="name">{{ $comment->owner->name}}</span>
                                   
-                                    @if (Auth::user()->can('manage', $comment))
+                                    @can('manage', $comment)
                                           <form class="form-edit-comment" action="{{ route('posts.comments.update', $comment->id) }}" method="POST">
                                                 @csrf
                                                 @method("PATCH")

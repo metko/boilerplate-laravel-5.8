@@ -146,16 +146,16 @@ class WriterActionsTest extends TestCase
     public function a_writer_can_update_his_password()
     {	
         $this->withoutExceptionHandling();
-        $member = UserFactory::withRole('writer')->create(['password' => Hash::make('oldpassword')]);
+        $writer = UserFactory::withRole('writer')->create(['password' => Hash::make('oldpassword')]);
         $attributes = [
             'old_password' => 'oldpassword',
             'password' => 'newpassworddd',
             'password_confirmation' => 'newpassworddd'
         ];
-        $this->actingAs($member)->patch(route('profile.update.password', $attributes));
-        $this->assertDatabasehas('users', [
-            'password' => $attributes['password'],
-        ]);
+        
+        $this->actingAs($writer)->patch(route('profile.update.password', $attributes));
+        $this->assertTrue(Hash::check($attributes['password'],$writer->password));
+
     }
 
     /** @test */

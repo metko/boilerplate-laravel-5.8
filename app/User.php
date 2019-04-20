@@ -4,6 +4,7 @@ namespace App;
 
 use App\Role;
 use App\Profile;
+use Illuminate\Support\Arr;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -104,5 +105,11 @@ class User extends Authenticatable
     public function gravatar()
     {
         return 'https://www.gravatar.com/avatar/' . md5($this->email) . '?d=mm&s=100';
+    }
+
+    public function editProfile($attributes)
+    {  
+        $this->update($attributes['user']);
+        $this->profile->update($attributes['profile']);
     }
 }

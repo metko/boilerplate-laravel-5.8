@@ -22,5 +22,10 @@ class PostCommentsPolicy
         return $user->is($comment->owner) || $user->is($comment->post->owner);
     }
 
+    public function create(User $user)
+    {
+        return auth()->user();
+    }
+
 
 }

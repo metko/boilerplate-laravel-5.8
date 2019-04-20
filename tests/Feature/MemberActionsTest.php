@@ -119,18 +119,24 @@ class MemberActionsTest extends TestCase
     }
 
     /** @test */
-    public function a_member_can_update_his_info()
+    public function a_member_can_update_his_profile()
     {	
         $this->withoutExceptionHandling();
         $member = UserFactory::create();
         $attributes = [
             'email' => 'new@mail.com',
-            'name' => 'new name'
+            'name' => 'new name',
+            'first_name' => 'thomas',
+            'location' => "brazil"
         ];
         $this->actingAs($member)->patch(route('profile.update', $attributes));
         $this->assertDatabasehas('users', [
             'name' => $attributes['name'],
             'email'=> $attributes['email']
+        ]);
+        $this->assertDatabasehas('profiles', [
+            'first_name' => $attributes['first_name'],
+            'location'=> $attributes['location']
         ]);
     }
     /** @test */
@@ -144,13 +150,11 @@ class MemberActionsTest extends TestCase
             'password_confirmation' => 'newpassworddd'
         ];
         $this->actingAs($member)->patch(route('profile.update.password', $attributes));
-        $this->assertDatabasehas('users', [
-            'password' => $attributes['password'],
-        ]);
+        $this->assertTrue(Hash::check($attributes['password'],$member->password));
     }
 
     /** @test */
-    public function a_member_can_update_his_password_with_the_old_password_confirmation()
+    public function a_member_cannot_update_his_password_without_the_old_password_confirmation()
     {	
         $this->withoutExceptionHandling();
         $member = UserFactory::create(['password' => Hash::make('oldpasswordfake')]);

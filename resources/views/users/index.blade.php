@@ -11,11 +11,7 @@
    <div class="container">
          <div class="row">
                <div class="column column-25">
-                  <ul>
-                     <li>Informations</li>
-                     <li>Password</li>
-                     <li>Logout</li>
-                  </ul>
+                  @include('users.sidebar', ['active' => 'informations'])
                </div>
                <div class="column column-75">
                   <div>
@@ -33,6 +29,7 @@
                   <div>
                      <strong>Bio : </strong> {{ $user->profile->bio }}
                   </div>
+                  <a href="{{ route('profile.edit') }}" class="button" style='margin-top: 10px'>Edit profile</a>
                </div>  
    </div>
   
