@@ -6,7 +6,7 @@ use Illuminate\Database\Seeder;
 class RolesTableSeeder extends Seeder
 {
 
-    protected $roles = ['member', 'writer', 'admin', 'super-admin'];
+    protected $roles = ['member', 'writer', 'admin', 'super_admin'];
     /**
      * Run the database seeds.
      *

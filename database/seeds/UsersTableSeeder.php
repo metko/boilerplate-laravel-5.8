@@ -11,7 +11,7 @@ class UsersTableSeeder extends Seeder
      * @return void
      */
 
-    protected $roles = ['member', 'writer', 'admin', 'super-admin'];
+    protected $roles = ['member', 'writer', 'admin', 'super_admin'];
 
     public function run()
     {   
