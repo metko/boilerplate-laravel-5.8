@@ -11,7 +11,8 @@ class UsersController extends Controller
 
     public function index()
     {
-        return view('users.index');
+        $user = auth()->user();
+        return view('users.index', compact('user'));
     }
     public function destroy()
     {	
@@ -29,6 +30,19 @@ class UsersController extends Controller
         $user->update($attributes);
     }
 
+    public function updateProfile(Request $request, User $user)
+    {
+        $user = auth()->user();
+        $attributes = $this->validate($request, [
+            'first_name' => 'present',
+            'last_name' => 'present',
+            'bio' => 'present',
+            'location' => 'present',
+        ]);
+
+        $user->profile->update($attributes);
+    }
+
    
     public function updatePassword(User $user, Request $request)
     {	
@@ -42,7 +56,7 @@ class UsersController extends Controller
         if(Hash::check($attributes['old_password'], $user->password)){
             $user->update(['password' => $attributes['password']]);
         }else{
-            return redirect(route('profil.edit.password'))
+            return redirect(route('profile.edit.password'))
                     ->withErrors(['old_password'=>'the  old password does not match'])
                     ->withInput();
         }

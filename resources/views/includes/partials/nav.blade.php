@@ -27,7 +27,7 @@
                             
                               {{ Auth::user()->name }}
 
-                              <a class="" href="{{ route('profil.index') }}">
+                              <a class="" href="{{ route('profile.index') }}">
                                     {{ __('Profil') }}
                               </a>
                               <a class="" href="{{ route('logout') }}"

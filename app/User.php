@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Role;
+use App\Profile;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -20,6 +21,9 @@ class User extends Authenticatable
         'name', 'email', 'password',
     ];
 
+   
+
+
     /**
      * The attributes that should be hidden for arrays.
      *
@@ -36,11 +40,12 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'activated' => 'boolean'
     ];
 
     public function roles()
     {
-        return $this->belongsToMany(Role::class);
+        return $this->belongsToMany(Role::class)->withTimestamps();
     }
 
     public function posts()
@@ -89,6 +94,11 @@ class User extends Authenticatable
         foreach($this->roles as $role){
             return $role->name == 'super_admin';
         }   
+    }
+
+    public function profile()
+    {
+        return $this->hasOne(Profile::class);
     }
 
     public function gravatar()

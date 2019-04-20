@@ -70,6 +70,7 @@ class RegisterController extends Controller
         ]);
 
         $user->assignRole('member');
+        //$user->profile();
         return $user;
     }
 }

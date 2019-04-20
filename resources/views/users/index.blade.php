@@ -17,8 +17,22 @@
                      <li>Logout</li>
                   </ul>
                </div>
-               <div class="column coluln-75">
-                  Content
+               <div class="column column-75">
+                  <div>
+                     <strong>Username : </strong> {{ $user->name }}
+                  </div>
+                  <div>
+                     <strong>First name : </strong> {{ $user->profile->first_name }}
+                  </div>
+                  <div>
+                     <strong>Last name : </strong> {{ $user->profile->last_name }}
+                  </div>
+                  <div>
+                     <strong>Localization : </strong> {{ $user->profile->location }}
+                  </div>
+                  <div>
+                     <strong>Bio : </strong> {{ $user->profile->bio }}
+                  </div>
                </div>  
    </div>
   

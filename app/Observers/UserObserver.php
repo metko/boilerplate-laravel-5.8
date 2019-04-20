@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\User;
+use App\Profile;
 
 class UserObserver
 {
@@ -15,6 +16,7 @@ class UserObserver
     public function created(User $user)
     {
         //$user->assignRole('member');
+        Profile::create(['user_id' => $user->id]);
     }
 
     /**

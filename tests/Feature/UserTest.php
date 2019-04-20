@@ -49,4 +49,21 @@ class UserTest extends TestCase
         $user = User::whereName($attributes['name'])->first();
         $this->assertTrue($user->isMember());
     }
+
+    /** @test */
+    public function a_user_can_update_his_profile()
+    {
+        $this->withoutExceptionHandling();
+        $user = UserFactory::create();
+        $attributes = [
+            'first_name' => "toto",
+            'last_name' => "",
+            'bio' => 'bio',
+            'location' => 'brazil'
+        ];
+        $this->actingAs($user)->patch(route('profile.updateProfile'), $attributes);
+        //$user->profile->update($attributes);
+        $this->assertDatabaseHas('profiles', [$attributes['first_name']=> 'toto']);
+
+    }
 }

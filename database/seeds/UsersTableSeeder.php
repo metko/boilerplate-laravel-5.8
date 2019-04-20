@@ -1,7 +1,9 @@
 <?php
 
 use App\User;
+use App\Profile;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class UsersTableSeeder extends Seeder
 {
@@ -16,25 +18,24 @@ class UsersTableSeeder extends Seeder
     public function run()
     {   
         foreach($this->roles as $role){
-            factory(User::class)->create([
-                    'name' => 'Member '. $role,
-                    'email' => $role .'@gmail.com',
-                    'password' => bcrypt($role)
+            $user = factory(User::class)->create([
+                    'name' => 'User '. $role,
+                    'email' => $role .'@'.$role.'.com',
+                    'password' => Hash::make('password')
             ]);
-        }
-
-        $users = User::all();
-
-        foreach($users as $user){
-            $role = explode(' ', $user->name);
-            if($role !=  'member'){
-                $user->assignRole($role[1]);
-            }
+            $user->assignRole($role);
+            $attributes = factory(Profile::class)->raw(['user_id' => $user->id]);
+            $user->profile->update($attributes);
         }
 
         factory(User::class, 4)->create()->each(function ($user) {
             $user->assignRole('member');
+            $attributes = factory(Profile::class)->raw(['user_id' => $user->id]);
+            $user->profile->update($attributes);
         });
+
+        
+    
        
     }
 }

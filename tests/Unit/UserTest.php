@@ -5,6 +5,7 @@ namespace Tests\Unit;
 use App\Post;
 use App\Role;
 use App\User;
+use App\Profile;
 use Tests\TestCase;
 use Facades\Tests\Setup\UserFactory;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -103,5 +104,14 @@ class UserTest extends TestCase
         $user = UserFactory::withRole('writer')->create(); 
         $this->assertEquals($user->gravatar(), 'https://www.gravatar.com/avatar/' . md5($user->email) . '?d=mm&s=100');
     }
+
+    /** @test */
+    public function it_has_profile(){
+        $this->withoutExceptionHandling();
+        $user = UserFactory::create(); 
+        $this->assertInstanceOf(Profile::class, $user->profile);
+    }
+
+     
 
 }
