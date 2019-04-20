@@ -114,7 +114,7 @@ class MemberActionsTest extends TestCase
         $this->withoutExceptionHandling();
        
         $member = UserFactory::create();
-        $this->actingAs($member)->delete(route('users.destroy'));
+        $this->actingAs($member)->delete(route('profil.destroy'));
         $this->assertDatabaseMissing('users',['name' => $member->name]);
     }
 
@@ -127,7 +127,7 @@ class MemberActionsTest extends TestCase
             'email' => 'new@mail.com',
             'name' => 'new name'
         ];
-        $this->actingAs($member)->patch(route('users.update', $attributes));
+        $this->actingAs($member)->patch(route('profil.update', $attributes));
         $this->assertDatabasehas('users', [
             'name' => $attributes['name'],
             'email'=> $attributes['email']
@@ -143,7 +143,7 @@ class MemberActionsTest extends TestCase
             'password' => 'newpassworddd',
             'password_confirmation' => 'newpassworddd'
         ];
-        $this->actingAs($member)->patch(route('users.update.password', $attributes));
+        $this->actingAs($member)->patch(route('profil.update.password', $attributes));
         $this->assertDatabasehas('users', [
             'password' => $attributes['password'],
         ]);
@@ -159,7 +159,7 @@ class MemberActionsTest extends TestCase
             'password' => 'newpassworddd',
             'password_confirmation' => 'newpassworddd'
         ];
-        $this->actingAs($member)->patch(route('users.update.password', $attributes))
+        $this->actingAs($member)->patch(route('profil.update.password', $attributes))
                 ->assertSessionHasErrors(['old_password']);
     }
 

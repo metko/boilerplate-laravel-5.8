@@ -26,9 +26,11 @@
                         <li class="nav-item dropdown">
                             
                               {{ Auth::user()->name }}
-                             
 
-                              <a class="dropdown-item" href="{{ route('logout') }}"
+                              <a class="" href="{{ route('profil.index') }}">
+                                    {{ __('Profil') }}
+                              </a>
+                              <a class="" href="{{ route('logout') }}"
                                     onclick="event.preventDefault();
                                     document.getElementById('logout-form').submit();">
                                     {{ __('Logout') }}

@@ -19,10 +19,11 @@ Auth::routes();
 
 /**USERS ROUTES */
 Route::group(['middleware' => ['auth']], function() {
-        Route::delete('users', 'UsersController@destroy')->name('users.destroy');
-        Route::patch('users/update', 'UsersController@update')->name('users.update');
-        Route::patch('users/updatePassword', 'UsersController@updatePassword')->name('users.update.password');
-        Route::get('users/updatePassword', 'UsersController@updatePassword')->name('users.edit.password');
+        Route::get('profil', 'UsersController@index')->name('profil.index');
+        Route::delete('profil', 'UsersController@destroy')->name('profil.destroy');
+        Route::patch('profil/update', 'UsersController@update')->name('profil.update');
+        Route::patch('profil/updatePassword', 'UsersController@updatePassword')->name('profil.update.password');
+        Route::get('profil/updatePassword', 'UsersController@updatePassword')->name('profil.edit.password');
 });
 /**END USER ROUTES */
 

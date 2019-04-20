@@ -8,6 +8,11 @@ use Illuminate\Support\Facades\Hash;
 
 class UsersController extends Controller
 {
+
+    public function index()
+    {
+        return view('users.index');
+    }
     public function destroy()
     {	
         $user = auth()->user();
@@ -37,7 +42,7 @@ class UsersController extends Controller
         if(Hash::check($attributes['old_password'], $user->password)){
             $user->update(['password' => $attributes['password']]);
         }else{
-            return redirect(route('users.edit.password'))
+            return redirect(route('profil.edit.password'))
                     ->withErrors(['old_password'=>'the  old password does not match'])
                     ->withInput();
         }

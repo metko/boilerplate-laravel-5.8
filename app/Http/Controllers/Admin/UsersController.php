@@ -28,7 +28,7 @@ class UsersController extends AdminController
         if(Hash::check($attributes['old_password'], $user->password)){
             $user->update(['password' => $attributes['password']]);
         }else{
-            return redirect(route('users.edit.password'))
+            return redirect(route('profil.edit.password'))
                     ->withErrors(['old_password'=>'the  old password does not match'])
                     ->withInput();
         }   
