@@ -10,7 +10,11 @@ Route::group(['middleware' => ['onlyAdmin','verified', 'activated']], function()
                 Route::get('/', 'AdminController@index')->name('dashboard');
                 Route::patch('users/{user}', 'UsersController@update')->name('users.update');
                 Route::patch('users/password/{user}', 'UsersController@updatePassword')->name('users.update.password');
-                });
+                
+                Route::post('users/desactivate/{user}', 'UsersController@desactivate')->name('users.desactivate');
+               
+                Route::delete('users/{user}', 'UsersController@destroy')->name('users.destroy');
+        });
 });
 /** END ADMLIN ROURES */
 

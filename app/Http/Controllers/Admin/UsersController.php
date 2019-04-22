@@ -43,4 +43,11 @@ class UsersController extends AdminController
             //TODO RETURN ERROR
         }
     }
+
+    public function desactivate(Request $request, $user)
+    {
+        $user = User::find($user);
+        $user->desactivate();
+        return redirect(route('admin.dashboard'));
+    }
 }

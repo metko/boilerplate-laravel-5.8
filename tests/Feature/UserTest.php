@@ -90,5 +90,16 @@ class UserTest extends TestCase
         $this->actingAs($member)->patch(route('profile.update.password', $attributes))
                 ->assertSessionHasErrors(['old_password']);
     }
+
+
+    /** @test */
+    public function a_user_can_desactivate_his_account()
+    {	
+        $user = UserFactory::create();
+        $this->actingAs($user)->post(route('account.desactivate'));
+        $this->assertDatabaseHas('users', ['id' => $user->id, 'activated' => false]);
+        $this->get(route('profile.index'))->assertStatus(302);
+        //dd($user);
+    }
     
 }

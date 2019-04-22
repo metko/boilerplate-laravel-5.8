@@ -21,7 +21,7 @@ class Activated
         if ( Auth::check() && Auth::user()->activated ) {
             return $next($request);
         }else{
-             return Redirect::route('activate.show');
+             return Redirect::route('account.activate.notice');
         }
     }
 }

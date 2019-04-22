@@ -64,4 +64,5 @@ class SuperAdminActionsTest extends TestCase
             ->patch( $post->comments->first()->path(), ['body' => 'Comment changed from super-admin'])->assertRedirect($post->path());
         $this->assertDatabaseHas('comments', ['body' => 'Comment changed from super-admin']);  
     }
+
 }

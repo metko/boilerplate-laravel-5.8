@@ -89,6 +89,7 @@ class User extends Authenticatable implements MustVerifyEmail
     public function desactivate()
     {
         $this->update(['activated' => 0]);
+        return $this;
     }
 
     public function isMember()

@@ -10,4 +10,10 @@ class ActivateController extends Controller
     {
         return view('activate.show');
     }
+
+    public function desactivate(Request $request)
+    {
+        $user = auth()->user()->desactivate()->logout();
+        return route('/');
+    }
 }

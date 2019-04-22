@@ -104,11 +104,20 @@ class AdminActionsTest extends TestCase
     /** @test */
     public function a_admin_can_delete_accounts()
     {	
-        $this->withoutExceptionHandling();
         $writer = UserFactory::withRole('writer')->create();
         $admin = UserFactory::withRole('admin')->create();
         $this->actingAs($admin)->delete(route('admin.users.destroy', $writer->id));
         $this->assertDatabaseMissing('users', ['name' => $writer->name]);
+    }
+
+    /** @test */
+    public function a_admin_can_desactivate_an_account()
+    {	
+        $this->withoutExceptionHandling();
+        $writer = UserFactory::withRole('writer')->create();
+        $admin = UserFactory::withRole('admin')->create();
+        $this->actingAs($admin)->post(route('admin.users.desactivate', $writer));
+        $this->assertDatabaseHas('users', ['id' => $writer->id, 'activated' => false]);
     }
 
 
