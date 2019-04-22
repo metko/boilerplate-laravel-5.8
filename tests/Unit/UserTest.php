@@ -49,8 +49,9 @@ class UserTest extends TestCase
         $user = UserFactory::withRole('member')->create(['activated' => 1]);
         $user->desactivate();
         $this->assertEquals(0, $user->activated);
-
     }
+
+    
 
     /** @test */
     public function it_cannot_attach_twice_the_same_role()
