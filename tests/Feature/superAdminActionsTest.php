@@ -9,61 +9,59 @@ use Facades\Tests\Setup\PostFactory;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class superAdminActionsTest extends TestCase
+class SuperAdminActionsTest extends TestCase
 {
     use RefreshDatabase;
     
     /** @test */
-    public function a_superadmin_can_create_post(){
-
-        $this->withoutExceptionHandling();
-        $user = UserFactory::withRole('super_admin')->create();
+    public function a_superadmin_can_create_post()
+    {
+        $superAdmin = UserFactory::withRole('super-admin')->create();
         //create post 
-        $this->actingAs($user)
+        $this->actingAs($superAdmin)
             ->post("/posts", ['title' => 'title', 'body' => "body"]);
         $this->assertDatabaseHas('posts', ['title' =>  "title", 'body' => "body" ]);  
     }
     /** @test */
     public function a_superdmin_can_manage_a_post_from_others()
     {	
-        $this->withoutExceptionHandling();
-        $user = UserFactory::withRole('super_admin')->create();
-        $post = PostFactory::createdBy('writer')->create();
+        $superAdmin = UserFactory::withRole('super-admin')->create();
+        $writer = UserFactory::withRole('writer')->create();
+        $post = PostFactory::ownedBy($writer)->create();
         //update post 
-        $this->actingAs($user)
+        $this->actingAs($superAdmin)
             ->patch($post->path(), ['title' => 'title changed', 'body' => "body changed"]);
         $this->assertDatabaseHas('posts', ['title' =>  "title changed", 'body' => "body changed" ]);
 
         //delete post
-        $this->actingAs($user)->delete($post->path());
+        $this->actingAs($superAdmin)->delete($post->path());
         $this->assertDatabaseMissing('posts', ['title' =>  $post->title]);
     }
 
     /** @test */
     public function a_superadmin_can_add_comments(){
 
-        $this->withoutExceptionHandling();
-        $user = UserFactory::withRole('super_admin')->create();
-        $post = PostFactory::createdBy('writer')->create();
+        $superAdmin = UserFactory::withRole('super-admin')->create();
+        $writer = UserFactory::withRole('writer')->create();
+        $post = PostFactory::ownedBy($writer)->create();
         
         //update post 
-        $this->actingAs($user)
+        $this->actingAs($superAdmin)
             ->post($post->path().'/comments', ['body' => 'Comment from super-admin'])
             ->assertRedirect($post->path());
         $this->assertDatabaseHas('comments', ['body' => 'Comment from super-admin']);  
     }
 
     /** @test */
-    public function a_superadmin_can_manage_any_comments(){
-
-        $this->withoutExceptionHandling();
-        $user = UserFactory::withRole('super_admin')->create();
-        $post = PostFactory::createdBy('writer')->create();
-        $comment = CommentFactory::withPost($post)->create();
+    public function a_superadmin_can_manage_any_comments()
+    {
+        $superAdmin = UserFactory::withRole('super-admin')->create();
+        $writer = UserFactory::withRole('writer')->create();
+        $post = PostFactory::ownedBy($writer)->withComments(2)->create();
         
         //update post 
-        $this->actingAs($user)
-            ->patch( $comment->path(), ['body' => 'Comment changed from super-admin'])->assertRedirect($post->path());
+        $this->actingAs($superAdmin)
+            ->patch( $post->comments->first()->path(), ['body' => 'Comment changed from super-admin'])->assertRedirect($post->path());
         $this->assertDatabaseHas('comments', ['body' => 'Comment changed from super-admin']);  
     }
 }

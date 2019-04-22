@@ -7,6 +7,8 @@ use App\Role;
 use App\User;
 use App\Profile;
 use Tests\TestCase;
+use Facades\Tests\Setup\RoleFactory;
+use Facades\Tests\Setup\PostFactory;
 use Facades\Tests\Setup\UserFactory;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -23,42 +25,41 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function it_can_assign_roles()
+    public function it_can_attach_roles()
     {	
-        $role = factory(Role::class)->create(['name' => 'role-test']);
+        $role = RoleFactory::create('role-test');
         $user = UserFactory::create();
-        $user->assignRole("role-test");
-        $this->assertEquals("role-test" , $user->roles->first()->name);
+        $user->attachRole("role-test");
+        $this->assertEquals("role-test" , $user->roles->first()->slug);
+        $this->assertEquals("Role-Test" , $user->roles->first()->name);
     }
 
     /** @test */
-    public function it_cannot_assign_twice_the_same_role()
+    public function it_cannot_attach_twice_the_same_role()
     {	
-        $this->withoutExceptionHandling();
         $user = UserFactory::withRole('role-test')->create();
-        $user->assignRole('role-test');
+        $user->attachRole('role-test');
         $this->assertCount(1 , $user->roles);
     }
 
     /** @test */
-    public function it_has_already()
+    public function it_has_has_role()
     {	
         $user = UserFactory::withRole('role-test')->create();
-        $this->assertTrue($user->isActually('role-test'));
+        $this->assertTrue($user->hasRole('role-test'));
     }
 
     /** @test */
-    public function it_cant_assign_roles_that_doesnt_exists()
+    public function it_cant_attach_roles_that_doesnt_exists()
     {	
         $user = UserFactory::withRole('member')->create();
-        $user->assignRole("fake-role");
+        $user->attachRole("fake-role");
         $this->assertCount(1 , $user->roles);
     }
 
     /** @test */
     public function it_has_member()
     {	
-        $this->withoutExceptionHandling();
         $user = UserFactory::withRole('member')->create();
         $this->assertTrue($user->isMember());
     }
@@ -66,7 +67,6 @@ class UserTest extends TestCase
     /** @test */
     public function it_has_writter()
     {	
-        $this->withoutExceptionHandling();
         $user = UserFactory::withRole('writer')->create();
         $this->assertTrue($user->isWriter());
     }
@@ -74,7 +74,6 @@ class UserTest extends TestCase
     /** @test */
     public function it_has_admin()
     {	
-        $this->withoutExceptionHandling();
         $user = UserFactory::withRole('admin')->create();
         $this->assertTrue($user->isAdmin());
     }
@@ -82,7 +81,6 @@ class UserTest extends TestCase
     /** @test */
     public function it_has_superAdmin()
     {	
-        $this->withoutExceptionHandling();
         $user = UserFactory::withRole('super_admin')->create();
         $this->assertTrue($user->isSuperAdmin());
     }
@@ -90,24 +88,20 @@ class UserTest extends TestCase
     /** @test */
     public function it_has_posts()
     {	
-        $this->withoutExceptionHandling();
-        $role = factory(Role::class)->create(['name' => 'member']);
         $user = UserFactory::withRole('writer')->create();
-        $post = factory(Post::class)->create(['owner_id' => $user->id]);
+        $post = PostFactory::ownedBy($user)->create();
         $this->assertInstanceOf(Post::class, $user->posts->first());
     }
     
     /** @test */
     public function it_has_gravatar()
     {	
-        $this->withoutExceptionHandling();
         $user = UserFactory::withRole('writer')->create(); 
         $this->assertEquals($user->gravatar(), 'https://www.gravatar.com/avatar/' . md5($user->email) . '?d=mm&s=100');
     }
 
     /** @test */
     public function it_has_profile(){
-        $this->withoutExceptionHandling();
         $user = UserFactory::create(); 
         $this->assertInstanceOf(Profile::class, $user->profile);
     }

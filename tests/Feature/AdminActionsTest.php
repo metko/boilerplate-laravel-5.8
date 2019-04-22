@@ -18,9 +18,9 @@ class AdminActionsTest extends TestCase
     /** @test */
     public function a_admin_can_create_post(){
         $this->withoutExceptionHandling();
-        $user = UserFactory::withRole('admin')->create();
+        $admin = UserFactory::withRole('admin')->create();
         //update post 
-        $this->actingAs($user)
+        $this->actingAs($admin)
             ->post("/posts", ['title' => 'title', 'body' => "body"]);
         $this->assertDatabaseHas('posts', ['title' =>  "title", 'body' => "body" ]);  
     }
@@ -28,15 +28,15 @@ class AdminActionsTest extends TestCase
     public function a_admin_can_manage_a_post_from_others()
     {	
         $this->withoutExceptionHandling();
-        $user = UserFactory::withRole('admin')->create();
-        $post = PostFactory::createdBy('writer')->create();
+        $admin = UserFactory::withRole('admin')->create();
+        $post = PostFactory::create();
         //update post 
-        $this->actingAs($user)
+        $this->actingAs($admin)
             ->patch($post->path(), ['title' => 'title changed', 'body' => "body changed"]);
         $this->assertDatabaseHas('posts', ['title' =>  "title changed", 'body' => "body changed" ]);
 
         //delete post
-        $this->actingAs($user)->delete($post->path());
+        $this->actingAs($admin)->delete($post->path());
         $this->assertDatabaseMissing('posts', ['title' =>  $post->title]);
     }
 
@@ -44,11 +44,11 @@ class AdminActionsTest extends TestCase
     public function a_admin_can_add_comments(){
 
         $this->withoutExceptionHandling();
-        $user = UserFactory::withRole('admin')->create();
-        $post = PostFactory::createdBy('writer')->create();
+        $admin = UserFactory::withRole('admin')->create();
+        $post = PostFactory::create();
         
         //update post 
-        $this->actingAs($user)
+        $this->actingAs($admin)
             ->post($post->path().'/comments', ['body' => 'Comment from admin'])
             ->assertRedirect($post->path());
         $this->assertDatabaseHas('comments', ['body' => 'Comment from admin']);  
@@ -58,68 +58,14 @@ class AdminActionsTest extends TestCase
     public function a_admin_can_manage_any_comments(){
 
         $this->withoutExceptionHandling();
-        $user = UserFactory::withRole('admin')->create();
-        $post = PostFactory::createdBy('writer')->create();
-        $comment = CommentFactory::withPost($post)->create();
-        
+        $admin = UserFactory::withRole('admin')->create();
+        $post = PostFactory::withComments(3)->create();
         //update post 
-        $this->actingAs($user)
-            ->patch( $comment->path(), ['body' => 'Comment changed from admin'])->assertRedirect($post->path());
+        $path = $post->comments->first()->path();
+        $this->actingAs($admin)
+            ->patch( $path, ['body' => 'Comment changed from admin'])->assertRedirect($post->path());
         $this->assertDatabaseHas('comments', ['body' => 'Comment changed from admin']);  
     }
-
-    /** @test */
-    public function a_admin_can_update_his_info()
-    {	
-        $this->withoutExceptionHandling();
-        $admin = UserFactory::withRole('admin')->create();
-        $attributes = [
-            'email' => 'new@mail.com',
-            'name' => 'new name'
-        ];
-        $this->actingAs($admin)->patch(route('admin.users.update', $admin->id), $attributes);
-        $this->assertDatabasehas('users', [
-            'name' => $attributes['name'],
-            'email'=> $attributes['email']
-        ]);
-    }
-    /** @test */
-    public function a_admin_can_update_his_password()
-    {	
-        $this->withoutExceptionHandling();
-        $admin = UserFactory::withRole('admin')->create(['password' => Hash::make('oldpassword')]);
-        $attributes = [
-            'old_password' => 'oldpassword',
-            'password' => 'newpassworddd',
-            'password_confirmation' => 'newpassworddd'
-        ];
-        $this->actingAs($admin)->patch(route('admin.users.update.password',$admin->id), $attributes)
-            ->assertSessionHasNoErrors(['old_password']);
-        $this->assertDatabasehas('users', [
-            'password' => $attributes['password'],
-        ]);
-        
-    }
-
-    /** @test */
-    public function a_admin_cannot_update_his_password_without_oldpassword_confirmation()
-    {	
-        $this->withoutExceptionHandling();
-        $admin = UserFactory::withRole('admin')->create(['password' => Hash::make('oldpassssword')]);
-        $attributes = [
-            'old_password' => 'oldpassword',
-            'password' => 'newpassworddd',
-            'password_confirmation' => 'newpassworddd'
-        ];
-        $this->actingAs($admin)->patch(route('admin.users.update.password',$admin->id), $attributes)
-            ->assertSessionHasErrors(['old_password']);
-        $this->assertDatabaseMissing('users', [
-            'password' => $attributes['password'],
-        ]);
-        
-    }
-
-    
 
     /** @test */
     public function a_admin_can_update_infos_of_others_account()

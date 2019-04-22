@@ -14,6 +14,7 @@
                   @include('users.sidebar', ['active' => 'informations'])
                </div>
                <div class="column column-75">
+                   <h3>Profile</h3>
                   <div>
                      <strong>Username : </strong> {{ $user->name }}
                   </div>
@@ -31,6 +32,7 @@
                   </div>
                   <a href="{{ route('profile.edit') }}" class="button" style='margin-top: 10px'>Edit profile</a>
                </div>  
+
    </div>
   
 @endsection

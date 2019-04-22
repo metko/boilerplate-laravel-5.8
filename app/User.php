@@ -5,6 +5,7 @@ namespace App;
 use App\Role;
 use App\Profile;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -54,46 +55,57 @@ class User extends Authenticatable
         return $this->hasMany(Post::class, 'owner_id');
     }
 
-    public function assignRole($roleName)
+    public function attachRole($roleName)
     { 
-        $role = Role::whereName($roleName)->first() ?? null;
-        if( ! $this->isActually($roleName)){
+        if(is_array($roleName)){
+            foreach($roleName as $r){
+                $role = Role::whereSlug(Str::slug($r))->first() ?? null;
+                if( ! $this->hasRole($r)){
+                    $user =  $this->roles()->attach($role);
+                    $this->refresh();    
+                }  
+            }
+            return $user;
+        }
+
+        $role = Role::whereSlug(Str::slug($roleName))->first() ?? null;
+        if( ! $this->hasRole($roleName)){
             $user =  $this->roles()->attach($role);
             $this->refresh();
             return $user;
         }  
     } 
 
-    public function isActually($role)
+    public function hasRole($role)
     {
-        return $this->roles->contains('name', $role);
+        return $this->roles->contains('slug', Str::slug($role));
     }
 
     public function isMember()
     {
         foreach($this->roles as $role){
-            return $role->name == 'member';
+            return $role->slug == 'member';
         }    
     }
 
     public function isWriter()
     {
         foreach($this->roles as $role){
-            return $role->name == 'writer';
+            return $role->slug == 'writer';
         }    
     }
 
     public function isAdmin()
     {
         foreach($this->roles as $role){
-            return $role->name == 'admin';
+            return $role->slug == 'admin';
         }    
     }
 
     public function isSuperAdmin()
     {
         foreach($this->roles as $role){
-            return $role->name == 'super_admin';
+            return $role->slug == 'super-admin';
         }   
     }
 

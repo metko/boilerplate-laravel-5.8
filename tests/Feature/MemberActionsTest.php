@@ -57,7 +57,7 @@ class MemberActionsTest extends TestCase
     {	
         $user = UserFactory::create();
         $post = PostFactory::create();
-       
+
         $this->actingAs($user)->post($post->path().'/comments', ['body' => 'This is a comment'] );
         $this->assertDatabaseHas('comments', ['body' => 'This is a comment']);
     }
@@ -65,7 +65,6 @@ class MemberActionsTest extends TestCase
     /** @test */
     public function a_member_can_update_his_comment()
     {	
-        $this->withoutExceptionHandling();
         $user = UserFactory::create();
         $comment = CommentFactory::createdBy($user)->create();
 
@@ -88,9 +87,9 @@ class MemberActionsTest extends TestCase
     public function a_member_cannot_manage_comments_of_others()
     {	
         $user = UserFactory::create();
-        $post = PostFactory::create();
-        $comment = CommentFactory::withPost($post)->create();
+        $post = PostFactory::withComments(2)->create();
 
+        $comment = $post->comments->first();
         $this->actingAs($user)->patch($comment->path(),['body' => 'body changed']);
         $this->assertDatabaseMissing('comments', ['body' => 'body changed']);  
 
@@ -102,7 +101,6 @@ class MemberActionsTest extends TestCase
     /** @test */
     public function a_member_cant_see_manage_posts_page()
     {	
-        //$this->withoutExceptionHandling();
         $member = UserFactory::create();
         $post = PostFactory::create();
         $this->actingAs($member)->get(route('manage.posts'))->assertStatus(403);
@@ -110,9 +108,7 @@ class MemberActionsTest extends TestCase
 
     /** @test */
     public function a_member_can_delete_his_account()
-    {	
-        $this->withoutExceptionHandling();
-       
+    {	       
         $member = UserFactory::create();
         $this->actingAs($member)->delete(route('profile.destroy'));
         $this->assertDatabaseMissing('users',['name' => $member->name]);
@@ -121,7 +117,6 @@ class MemberActionsTest extends TestCase
     /** @test */
     public function a_member_can_update_his_profile()
     {	
-        $this->withoutExceptionHandling();
         $member = UserFactory::create();
         $attributes = [
             'email' => 'new@mail.com',
@@ -142,7 +137,6 @@ class MemberActionsTest extends TestCase
     /** @test */
     public function a_member_can_update_his_password()
     {	
-        $this->withoutExceptionHandling();
         $member = UserFactory::create(['password' => Hash::make('oldpassword')]);
         $attributes = [
             'old_password' => 'oldpassword',
@@ -156,7 +150,6 @@ class MemberActionsTest extends TestCase
     /** @test */
     public function a_member_cannot_update_his_password_without_the_old_password_confirmation()
     {	
-        $this->withoutExceptionHandling();
         $member = UserFactory::create(['password' => Hash::make('oldpasswordfake')]);
         $attributes = [
             'old_password' => 'oldpassword',

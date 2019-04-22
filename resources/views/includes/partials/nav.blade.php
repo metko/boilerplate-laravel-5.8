@@ -7,9 +7,9 @@
                <ul>
                   <li><a href="{{ route('posts.index') }}">Blog</a></li>
                   @hasPosts
-                        <li><a href="{{ route('manage.posts') }}">My posts</a></li>
+                         <li><a href="{{ route('manage.posts') }}">My posts</a></li>
                   @endhasPosts
-               </ul>
+               </ul> 
            </div>
             <div class="nav-links-right">
             <ul>

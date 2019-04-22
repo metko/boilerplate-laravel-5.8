@@ -37,7 +37,6 @@ class PostController extends Controller
 
     public function edit(Post $post)
     {
-       
         $this->authorize('manage', $post);
         return view('posts.edit', compact('post'));
     }
@@ -45,7 +44,7 @@ class PostController extends Controller
     public function update(Post $post)
     {
         $this->authorize('manage', $post);
-        $post->update( $this->validateRequest(request()));
+        $post->update($this->validateRequest(request()));
         toast('Post updated','success','top-right');
         return redirect($post->path());
     }
@@ -56,16 +55,7 @@ class PostController extends Controller
         $this->authorize('manage', $post);
         $post->delete();
         toast('Comment destroyed','success','top-right');
-
         return redirect(route('manage.posts'));
-    }
-
-    private function validateRequest($request)
-    {
-        return $request->validate([
-            'title' => 'required',
-            'body' => 'required'
-        ]);
     }
 
     public function managePosts()
@@ -74,5 +64,13 @@ class PostController extends Controller
         $posts = auth()->user()->posts;
         //dd($posts->all());
         return view('posts.managePosts', compact('posts'));
+    }
+
+    private function validateRequest($request)
+    {
+        return $request->validate([
+            'title' => 'required',
+            'body' => 'required'
+        ]);
     }
 }
