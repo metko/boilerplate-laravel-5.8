@@ -15,7 +15,7 @@ Route::get('/', function () {
     return view('welcome');
 })->name('homepage');
 
-Auth::routes();
+Auth::routes(['verify' => true]);
 
 /**USERS ROUTES */
 Route::group(['middleware' => ['auth']], function() {
@@ -38,7 +38,7 @@ Route::group(['middleware' => ['auth']], function() {
 Route::get('admin/login', 'Admin\Auth\LoginController@showLoginForm')->name('admin.showLoginForm');
 Route::post('admin/login', 'Admin\Auth\LoginController@login')->name('admin.login');
 
-Route::group(['middleware' => ['onlyAdmin']], function() {
+Route::group(['middleware' => ['onlyAdmin','verified']], function() {
         Route::prefix('admin')->namespace('Admin')->name('admin.')->group(function () {
 
                 Route::get('/', 'AdminController@index')->name('dashboard');
@@ -53,7 +53,7 @@ Route::group(['middleware' => ['onlyAdmin']], function() {
 
 /** POST ROUTES */
 Route::resource('posts', 'PostController');
-Route::group(['middleware' => ['can:create,App\Post']], function() {
+Route::group(['middleware' => ['can:create,App\Post','verified']], function() {
         Route::prefix('manage')->name('manage.')->group(function () {
                 Route::get('posts', 'PostController@managePosts')->name('posts');
         });
@@ -62,13 +62,13 @@ Route::group(['middleware' => ['can:create,App\Post']], function() {
 
 /** POST COMMENTS ROUTES */
 Route::post('/posts/{post}/comments', 'PostCommentsController@store')
-        ->name('posts.comments.store')->middleware('auth');
+        ->name('posts.comments.store')->middleware(['auth', 'verified']);
 
 Route::patch('/comments/{comment}', 'PostCommentsController@update')
-        ->name('posts.comments.update')->middleware('auth');
+        ->name('posts.comments.update')->middleware(['auth', 'verified']);
 
 Route::delete('/comments/{comment}', 'PostCommentsController@destroy')
-        ->name('posts.comments.destroy')->middleware('auth');
+        ->name('posts.comments.destroy')->middleware(['auth', 'verified'] );
 /** END POST COMMENTS ROUTE */
 
 Route::get('/home', 'HomeController@index')->name('home');

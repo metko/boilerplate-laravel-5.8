@@ -10,7 +10,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     use Notifiable;
 
@@ -20,7 +20,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password', 'activated'
     ];
 
    
@@ -79,6 +79,16 @@ class User extends Authenticatable
     public function hasRole($role)
     {
         return $this->roles->contains('slug', Str::slug($role));
+    }
+
+    public function activate()
+    {
+        $this->update(['activated' => 1]);
+    }
+
+    public function desactivate()
+    {
+        $this->update(['activated' => 0]);
     }
 
     public function isMember()
