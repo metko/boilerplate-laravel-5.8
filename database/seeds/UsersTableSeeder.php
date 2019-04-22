@@ -13,7 +13,7 @@ class UsersTableSeeder extends Seeder
      * @return void
      */
 
-    protected $roles = ['member', 'writer', 'admin', 'super_admin'];
+    protected $roles = ['member', 'writer', 'admin', 'super-admin'];
 
     public function run()
     {   
@@ -23,13 +23,13 @@ class UsersTableSeeder extends Seeder
                     'email' => $role .'@'.$role.'.com',
                     'password' => Hash::make('password')
             ]);
-            $user->assignRole($role);
+            $user->attachRole($role);
             $attributes = factory(Profile::class)->raw(['user_id' => $user->id]);
             $user->profile->update($attributes);
         }
 
         factory(User::class, 4)->create()->each(function ($user) {
-            $user->assignRole('member');
+            $user->attachRole('member');
             $attributes = factory(Profile::class)->raw(['user_id' => $user->id]);
             $user->profile->update($attributes);
         });

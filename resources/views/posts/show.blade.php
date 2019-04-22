@@ -19,7 +19,7 @@
       </div>
 
       <div class="container">
-            <p>{{$post->body}}</p>
+            <p>{!! $post->body !!}</p>
             <hr>
             <h3>{{ $post->comments->count() }} comments</h3>
             @can('create', App\Comment::class)

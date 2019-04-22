@@ -1,6 +1,7 @@
 {
     "/js/app.js": "/js/app.js",
     "/css/app.css": "/css/app.css",
+    "/css/medium-editor.css": "/css/medium-editor.css",
     "/css/admin.app.css": "/css/admin.app.css",
     "/js/custom.js": "/js/custom.js",
     "/js/scripts.js": "/js/scripts.js",

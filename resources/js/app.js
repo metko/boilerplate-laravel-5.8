@@ -1,4 +1,4 @@
-
+import MediumEditor from 'medium-editor';
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -31,3 +31,15 @@
 // const app = new Vue({
 //     el: '#app'
 // });
+
+var editor = new MediumEditor('#medium-editor', {
+   toolbar: {
+      buttons: [
+         'bold', 'italic', 'underline','h2', 'h3', 'anchor', 'quote', 'pre', 'orderedlist', 'unorderedlist',
+         ,'removeFormat',
+         'justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull' 
+         
+      ],
+
+   }
+});

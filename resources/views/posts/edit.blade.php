@@ -1,5 +1,8 @@
 @extends('layouts.app')
 @section('title', 'Create post' )
+@section('style')
+    <link href='{{ asset('css/medium-editor.css') }}' rel='stylesheet'>
+@endsection
 
 @section('content')
 
@@ -20,10 +23,9 @@
                           </span>
                       @endif
                   </div>
-
                   <div class="form-control">
                       <label for="nameField">{{ __('Content') }}</label>
-                        <textarea name="body" id="" cols="30" rows="10" class="{{ $errors->has('title') ? ' is-invalid' : '' }}"> {{ $post->body }}</textarea>     
+                        <textarea id="medium-editor" name="body" id="" cols="30" rows="10" class="{{ $errors->has('title') ? ' is-invalid' : '' }}"> {{ $post->body }}</textarea>     
                         @if ($errors->has('body'))
                            <span class="invalid-feedback" role="alert">
                                  <span>{{ $errors->first('body') }}</span>
