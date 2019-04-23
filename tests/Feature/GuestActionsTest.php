@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Role;
 use Tests\TestCase;
 use Facades\Tests\Setup\PostFactory;
 use Facades\Tests\Setup\UserFactory;
@@ -10,14 +11,14 @@ use Facades\Tests\Setup\CommentFactory;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class MemberActionsTest extends TestCase
+class GuestActionsTest extends TestCase
 {
 
     use RefreshDatabase;
 
 
     /** @test */
-    public function a_member_can_see_a_post()
+    public function a_guest_can_see_a_post()
     {	
         $user = UserFactory::create();
         $post = PostFactory::create();
@@ -27,7 +28,7 @@ class MemberActionsTest extends TestCase
     }
 
     /** @test */
-    public function members_cannot_manage_posts()
+    public function guests_cannot_manage_posts()
     {	
         //Form to create a post
         $user = UserFactory::create();
@@ -53,8 +54,9 @@ class MemberActionsTest extends TestCase
 
 
     /** @test */
-    public function a_member_can_create_a_comment()
+    public function guest_can_create_a_comment()
     {	
+        $this->withoutExceptionHandling();
         $user = UserFactory::create();
         $post = PostFactory::create();
 
@@ -63,7 +65,7 @@ class MemberActionsTest extends TestCase
     }
 
     /** @test */
-    public function a_member_can_update_his_comment()
+    public function guest_can_update_his_comment()
     {	
         $user = UserFactory::create();
         $comment = CommentFactory::createdBy($user)->create();
@@ -74,7 +76,7 @@ class MemberActionsTest extends TestCase
     }
 
     /** @test */
-    public function a_member_can_delete_his_comment()
+    public function guest_can_delete_his_comment()
     {	
         $user = UserFactory::create();
         $comment = CommentFactory::createdBy($user)->create();
@@ -84,7 +86,7 @@ class MemberActionsTest extends TestCase
     }
 
     /** @test */
-    public function a_member_cannot_manage_comments_of_others()
+    public function guest_cannot_manage_comments_of_others()
     {	
         $user = UserFactory::create();
         $post = PostFactory::withComments(2)->create();
@@ -99,7 +101,7 @@ class MemberActionsTest extends TestCase
     }
 
     /** @test */
-    public function a_member_cant_see_manage_posts_page()
+    public function guest_cant_see_manage_posts_page()
     {	
         $member = UserFactory::create();
         $post = PostFactory::create();
@@ -107,7 +109,7 @@ class MemberActionsTest extends TestCase
     }
 
     /** @test */
-    public function a_member_can_delete_his_account()
+    public function guest_can_delete_his_account()
     {	       
         $member = UserFactory::create();
         $this->actingAs($member)->delete(route('profile.destroy'));
@@ -115,7 +117,7 @@ class MemberActionsTest extends TestCase
     }
 
     /** @test */
-    public function a_member_can_update_his_profile()
+    public function guest_can_update_his_profile()
     {	
         $member = UserFactory::create();
         $attributes = [
@@ -135,7 +137,7 @@ class MemberActionsTest extends TestCase
         ]);
     }
     /** @test */
-    public function a_member_can_update_his_password()
+    public function guest_can_update_his_password()
     {	
         $member = UserFactory::create(['password' => Hash::make('oldpassword')]);
         $attributes = [
@@ -148,7 +150,7 @@ class MemberActionsTest extends TestCase
     }
 
     /** @test */
-    public function a_member_cannot_update_his_password_without_the_old_password_confirmation()
+    public function guest_cannot_update_his_password_without_the_old_password_confirmation()
     {	
         $member = UserFactory::create(['password' => Hash::make('oldpasswordfake')]);
         $attributes = [

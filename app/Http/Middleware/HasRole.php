@@ -5,7 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Support\Facades\Auth;
 
-class AdminAccess
+class HasRole
 {
     /**
      * Handle an incoming request.
@@ -14,15 +14,13 @@ class AdminAccess
      * @param  \Closure  $next
      * @return mixed
      */
-    public function handle($request, Closure $next)
+    public function handle($request, Closure $next, $role)
     {
-        if ( Auth::check() && ( Auth::user()->isAdmin() || Auth::user()->isSuperAdmin() ) ) {
+        $role = 'is'.ucfirst($role);
+        if ( Auth::check() &&  Auth::user()->$role() ){
             return $next($request);
         }else{
-            return redirect('login');
-        }
-      
-            
-        
+            return abort(403);
+        }   
     }
 }

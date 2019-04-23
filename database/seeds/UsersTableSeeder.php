@@ -13,7 +13,7 @@ class UsersTableSeeder extends Seeder
      * @return void
      */
 
-    protected $roles = ['member', 'writer', 'admin', 'super-admin'];
+    protected $roles = ['guest', 'moderator', 'writer', 'admin', 'super-admin'];
 
     public function run()
     {   
@@ -29,7 +29,7 @@ class UsersTableSeeder extends Seeder
         }
 
         factory(User::class, 4)->create()->each(function ($user) {
-            $user->attachRole('member');
+            $user->attachRole('guest');
             $attributes = factory(Profile::class)->raw(['user_id' => $user->id]);
             $user->profile->update($attributes);
         });

@@ -92,32 +92,45 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this;
     }
 
-    public function isMember()
+    public function hasLevel($level)
+    {   
+       
+        foreach($this->roles as $role){
+            if((int)$role->level >=  $level){
+                return true;
+            }
+        } 
+    }
+
+    public function isGuest()
+    {
+        return $this->hasLevel(0);   
+    }
+
+    public function isModerator()
     {
         foreach($this->roles as $role){
-            return $role->slug == 'member';
+            if($role->level == 1 || $role->level >= 3)
+            {
+                return true;
+            }
         }    
     }
 
     public function isWriter()
     {
-        foreach($this->roles as $role){
-            return $role->slug == 'writer';
-        }    
+       
+        return $this->hasLevel(2);      
     }
 
     public function isAdmin()
     {
-        foreach($this->roles as $role){
-            return $role->slug == 'admin';
-        }    
+        return $this->hasLevel(3);       
     }
 
     public function isSuperAdmin()
     {
-        foreach($this->roles as $role){
-            return $role->slug == 'super-admin';
-        }   
+        return $this->hasLevel(4);     
     }
 
     public function profile()

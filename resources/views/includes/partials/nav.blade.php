@@ -6,9 +6,9 @@
          <div>
                <ul>
                   <li><a href="{{ route('posts.index') }}">Blog</a></li>
-                  @hasPosts
+                  @writer
                          <li><a href="{{ route('manage.posts') }}">My posts</a></li>
-                  @endhasPosts
+                  @endwriter
                </ul> 
            </div>
             <div class="nav-links-right">
@@ -25,7 +25,7 @@
                   @else
                         <li class="nav-item dropdown">
                             
-                              {{ Auth::user()->name }}
+                              {{ auth::user()->name }}
 
                               <a class="" href="{{ route('profile.index') }}">
                                     {{ __('Profil') }}

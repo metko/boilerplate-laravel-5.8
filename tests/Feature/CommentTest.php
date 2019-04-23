@@ -18,7 +18,7 @@ class CommentTest extends TestCase
     public function a_comment_must_have_valide_data()
     {	
         //$this->withoutExceptionHandling();
-        $user = UserFactory::withRole('member')->create();
+        $user = UserFactory::create();
         $post = PostFactory::create();
 
         //Create no validated

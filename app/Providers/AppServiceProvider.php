@@ -28,13 +28,21 @@ class AppServiceProvider extends ServiceProvider
     {
         User::observe(UserObserver::class);
         
+        Blade::if('superAdmin', function () {
+            return auth()->check() && auth()->user()->isSuperAdmin() ;
+        });
+
         Blade::if('admin', function () {
-            return auth()->check() && ( auth()->user()->isAdmin() ||  auth()->user()->isSuperAdmin()) ;
+            return  auth()->check() && auth()->user()->isAdmin() ;
         });
-        
-        Blade::if('hasPosts', function () {
-            return auth()->check() && ! auth()->user()->isMember();
+
+        Blade::if('writer', function () {
+            return auth()->check() && auth()->user()->isWriter() ;
         });
-        
+
+        Blade::if('moderator', function () {
+            return auth()->check() && auth()->user()->isModerator() ;
+        });
+   
     }
 }

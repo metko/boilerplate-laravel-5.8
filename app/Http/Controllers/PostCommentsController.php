@@ -22,7 +22,6 @@ class PostCommentsController extends Controller
         $attributes = $this->validateRequest($request);
         $comment = $post->addComment($attributes);
         toast('Comment saved','success','top-right');
-
         return redirect($post->path());
     }
 

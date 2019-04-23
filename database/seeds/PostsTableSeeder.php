@@ -13,7 +13,7 @@ class PostsTableSeeder extends Seeder
      */
     public function run()
     {
-        for($i = 2; $i <= 4; $i++ ){
+        for($i = 3; $i <= 5; $i++ ){
            factory(Post::class)->create(['owner_id' => $i]);
         }   
         

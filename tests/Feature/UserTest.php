@@ -26,18 +26,28 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function a_user_can_have_multiple_roles()
+    public function it_cannot_attach_twice_the_same_role()
     {	
-        RoleFactory::create(['Member','Writer']);
-        $user = UserFactory::withoutRole()->create();
-        $user->attachRole(['Member','Writer']);
-        $this->assertCount(2, $user->roles);
+        $user = UserFactory::withRole('moderator')->create();
+        $user->attachRole('moderator');
+        $this->assertCount(1 , $user->roles);
     }
 
     /** @test */
-    public function a_new_user_is_member_by_default()
-    {	    
-        $role =  RoleFactory::create("Member");   
+    public function a_user_can_have_multiple_differents_roles()
+    {	
+        $user = UserFactory::create();
+        $user->attachRole(['Moderator','Writer']);
+        $this->assertCount(3, $user->roles);
+        $this->assertTrue($user->isGuest());
+        $this->assertTrue($user->isModerator());
+        $this->assertTrue($user->isWriter());
+    }
+
+    /** @test */
+    public function a_new_user_is_level_0_by_default()
+    {	  
+        RoleFactory::create('guest', 0) ; 
         $attributes = [
             'name' => "toto",
             'email' => 'toto@toto.com',
@@ -46,18 +56,18 @@ class UserTest extends TestCase
         ];
         $this->post('register', $attributes);
         $user = User::whereName($attributes['name'])->first();
-        $this->assertTrue($user->isMember());
+        $this->assertTrue($user->hasLevel(0));
     }
 
     /** @test */
     public function a_user_can_update_his_info()
     {	
-        $writer = UserFactory::withRole('writer')->create();
+        $guest = UserFactory::create();
         $attributes = [
             'email' => 'new@mail.com',
             'name' => 'new name'
         ];
-        $this->actingAs($writer)->patch(route('profile.update', $attributes));
+        $this->actingAs($guest)->patch(route('profile.update', $attributes));
         $this->assertDatabasehas('users', [
             'name' => $attributes['name'],
             'email'=> $attributes['email']
@@ -66,28 +76,28 @@ class UserTest extends TestCase
     /** @test */
     public function a_user_can_update_his_password()
     {	
-        $admin = UserFactory::withRole('admin')->create(['password' => Hash::make('oldpassword')]);
+        $user = UserFactory::create(['password' => Hash::make('oldpassword')]);
         $attributes = [
             'old_password' => 'oldpassword',
             'password' => 'newpassworddd',
             'password_confirmation' => 'newpassworddd'
         ];
     
-        $this->actingAs($admin)->patch(route('profile.update.password', $attributes));
-        $this->assertTrue(Hash::check($attributes['password'],$admin->password));
+        $this->actingAs($user)->patch(route('profile.update.password', $attributes));
+        $this->assertTrue(Hash::check($attributes['password'],$user->password));
 
     }
 
     /** @test */
     public function a_user_cannot_update_his_password_without_the_old_password_confirmation()
     {	
-        $member = UserFactory::withRole('member')->create(['password' => Hash::make('oldpasswordfake')]);
+        $user = UserFactory::create(['password' => Hash::make('oldpasswordfake')]);
         $attributes = [
             'old_password' => 'oldpassword',
             'password' => 'newpassworddd',
             'password_confirmation' => 'newpassworddd'
         ];
-        $this->actingAs($member)->patch(route('profile.update.password', $attributes))
+        $this->actingAs($user)->patch(route('profile.update.password', $attributes))
                 ->assertSessionHasErrors(['old_password']);
     }
 

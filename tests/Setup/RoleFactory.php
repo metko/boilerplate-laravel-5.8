@@ -7,20 +7,33 @@ use Illuminate\Support\Str;
 
 class RoleFactory{
 
+   protected $roles = ['Guest', 'Moderator', 'Writer', 'Admin', 'Super-Admin'];
 
-   public function create($role){
-
-      if(is_array($role)){
+   public function create($roles = null, $level = null){
+      if(is_null($roles)){
+         $i = 0;
+         foreach($this->roles as $role){
+               factory(Role::class)->create([
+                  'name' => $role,
+                  'slug' => Str::slug($role),
+                  'description' => $role.' description',
+                  'level' => $i,
+               ]);
+               $i++;
+         }
+      }elseif(is_array($roles)){
          foreach($role as $r){
             factory(Role::class)->create([
-               'name' => Str::title($r),
-               'slug' =>  Str::slug($r),
+               'name' => Str::title($r['name']),
+               'slug' =>  Str::slug($r['name']),
+               'level' => $r['level']
             ]);
          }
       }else{
          return factory(Role::class)->create([
-            'name' => Str::title($role),
-            'slug' =>  Str::slug($role),
+            'name' => Str::title($roles),
+            'slug' =>  Str::slug($roles),
+            'level' => $level
          ]);;
       }
    

@@ -18,14 +18,10 @@ class ManagePostTest extends TestCase
     /** @test */
     public function can_view_all_the_posts()
     {	
-        $this->withoutExceptionHandling();
         $post1 = PostFactory::create();
-        $post2 = PostFactory::create();
-        $post3 = PostFactory::create();
         $this->get(route('posts.index'))
-                ->assertSee($post1->title)
-                ->assertSee($post2->title)
-                ->assertSee($post3->title);
+                ->assertSee($post1->title);
+               
     }
 
     /** @test */

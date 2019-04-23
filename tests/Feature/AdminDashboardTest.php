@@ -34,7 +34,7 @@ class AdminDashboardTest extends TestCase
                 ->assertstatus(302)
                 ->assertRedirect(route('home'));
         auth()->logout();
-        $this->post(route('admin.login', ['email' => $writer->email, 'password' => 'writer']))
+        $this->post(route('admin.login', ['email' => $member->email, 'password' => 'member']))
                 ->assertstatus(302)
                 ->assertRedirect(route('home'));
         
@@ -46,16 +46,16 @@ class AdminDashboardTest extends TestCase
     /** @test */
     public function only_admin_can_access_to_dashboard()
     {	
-        $this->withoutExceptionHandling();
-        $member = UserFactory::withRole('member')->create(['email'=>'member@test.com','password'=>bcrypt('member')]);
+        //$this->withoutExceptionHandling();
+        $guest = UserFactory::withRole('guest')->create(['email'=>'member@test.com','password'=>bcrypt('member')]);
         $writer = UserFactory::withRole('writer')->create(['email'=>'writer@test.com','password'=>bcrypt('writer')]);
         $admin = UserFactory::withRole('admin')->create(['email'=>'admin@test.com','password'=>bcrypt('admin')]);
-        $superAdmin = UserFactory::withRole('superAdmin')->create(['email'=>'superadmin@test.com','password'=>bcrypt('superadmin')]);
+        $superAdmin = UserFactory::withRole('super-admin')->create(['email'=>'superadmin@test.com','password'=>bcrypt('superadmin')]);
 
-        $this->actingAs($member)->get(route('admin.dashboard'))->assertStatus(302);
-        $this->actingAs($writer)->get(route('admin.dashboard'))->assertStatus(302);
+        $this->actingAs($guest)->get(route('admin.dashboard'))->assertStatus(403);
+        $this->actingAs($writer)->get(route('admin.dashboard'))->assertStatus(403);
         $this->actingAs($admin)->get(route('admin.dashboard'))->assertStatus(200);
-        // $this->actingAs($superAdmin)->get(route('admin.dashboard'))->assertStatus(200);
+        $this->actingAs($superAdmin)->get(route('admin.dashboard'))->assertStatus(200);
     }
 
 

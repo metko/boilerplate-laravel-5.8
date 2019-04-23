@@ -39,7 +39,9 @@ class PostFactory{
       ]);  
 
       if($this->commentsCount){
-         factory(Comment::class, $this->commentsCount)->create(['post_id' => $post->id, 'owner_id' => $this->user->id]);
+         factory(Comment::class, $this->commentsCount)->create([
+            'post_id' => $post->id, 'owner_id' => factory(User::class)->create()
+         ]);
       }
 
       return $post;

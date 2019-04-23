@@ -12,7 +12,7 @@ class PostCommentsPolicy
 
     public function before(User $user)
     {
-        if($user->isAdmin() || $user->isSuperAdmin()){
+        if($user->isModerator() || $user->isAdmin() || $user->isSuperAdmin()){
             return true;
         }
     }

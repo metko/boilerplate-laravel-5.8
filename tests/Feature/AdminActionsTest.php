@@ -16,7 +16,8 @@ class AdminActionsTest extends TestCase
 
 
     /** @test */
-    public function a_admin_can_create_post(){
+    public function a_admin_can_create_post()
+    {
         $this->withoutExceptionHandling();
         $admin = UserFactory::withRole('admin')->create();
         //update post 
@@ -27,7 +28,6 @@ class AdminActionsTest extends TestCase
     /** @test */
     public function a_admin_can_manage_a_post_from_others()
     {	
-        $this->withoutExceptionHandling();
         $admin = UserFactory::withRole('admin')->create();
         $post = PostFactory::create();
         //update post 
@@ -41,9 +41,8 @@ class AdminActionsTest extends TestCase
     }
 
     /** @test */
-    public function a_admin_can_add_comments(){
-
-        $this->withoutExceptionHandling();
+    public function a_admin_can_add_comments()
+    {
         $admin = UserFactory::withRole('admin')->create();
         $post = PostFactory::create();
         
@@ -55,9 +54,8 @@ class AdminActionsTest extends TestCase
     }
 
     /** @test */
-    public function a_admin_can_manage_any_comments(){
-
-        $this->withoutExceptionHandling();
+    public function a_admin_can_manage_any_comments()
+    {
         $admin = UserFactory::withRole('admin')->create();
         $post = PostFactory::withComments(3)->create();
         //update post 
@@ -70,14 +68,13 @@ class AdminActionsTest extends TestCase
     /** @test */
     public function a_admin_can_update_infos_of_others_account()
     {	
-        $this->withoutExceptionHandling();
         $admin = UserFactory::withRole('admin')->create();
-        $member = UserFactory::withRole('member')->create();
+        $guest = UserFactory::withRole('guest')->create();
         $attributes = [
             'email' => 'new@mail.com',
             'name' => 'new name'
         ];
-        $this->actingAs($admin)->patch(route('admin.users.update', $member->id) , $attributes );
+        $this->actingAs($admin)->patch(route('admin.users.update', $guest->id) , $attributes );
         $this->assertDatabasehas('users', [
             'name' => $attributes['name'],
             'email'=> $attributes['email']
@@ -87,15 +84,14 @@ class AdminActionsTest extends TestCase
     /** @test */
     public function a_admin_can_update_password_of_others_account()
     {	
-        $this->withoutExceptionHandling();
         $admin = UserFactory::withRole('admin')->create();
-        $writer = UserFactory::withRole('writer')->create(['password' => Hash::make('oldpassword')]);
+        $guest = UserFactory::create(['password' => Hash::make('oldpassword')]);
         $attributes = [
             'old_password' => 'oldpassword',
             'password' => 'newpassworddd',
             'password_confirmation' => 'newpassworddd'
         ];
-        $this->actingAs($admin)->patch(route('admin.users.update.password', $writer->id), $attributes);
+        $this->actingAs($admin)->patch(route('admin.users.update.password', $guest->id), $attributes);
         $this->assertDatabasehas('users', [
             'password' => $attributes['password'],
         ]);
@@ -104,20 +100,19 @@ class AdminActionsTest extends TestCase
     /** @test */
     public function a_admin_can_delete_accounts()
     {	
-        $writer = UserFactory::withRole('writer')->create();
+        $guest = UserFactory::create();
         $admin = UserFactory::withRole('admin')->create();
-        $this->actingAs($admin)->delete(route('admin.users.destroy', $writer->id));
-        $this->assertDatabaseMissing('users', ['name' => $writer->name]);
+        $this->actingAs($admin)->delete(route('admin.users.destroy', $guest->id));
+        $this->assertDatabaseMissing('users', ['name' => $guest->name]);
     }
 
     /** @test */
     public function a_admin_can_desactivate_an_account()
     {	
-        $this->withoutExceptionHandling();
-        $writer = UserFactory::withRole('writer')->create();
+        $guest = UserFactory::create();
         $admin = UserFactory::withRole('admin')->create();
-        $this->actingAs($admin)->post(route('admin.users.desactivate', $writer));
-        $this->assertDatabaseHas('users', ['id' => $writer->id, 'activated' => false]);
+        $this->actingAs($admin)->post(route('admin.users.desactivate', $guest));
+        $this->assertDatabaseHas('users', ['id' => $guest->id, 'activated' => false]);
     }
 
 
