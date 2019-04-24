@@ -10,6 +10,7 @@
    </div>
 
    <div class="container">
+      @include('flash')
       @forelse($posts as $post)
          <article>
             <h2>{{$post->title}}  <span class="name"><strong> - {{$post->owner->name}}</strong></span> </h2>

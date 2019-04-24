@@ -76,4 +76,14 @@ class AdminDashboardTest extends TestCase
         $users = factory(User::class, 123)->create();
         $this->actingAs($admin)->get(route('admin.dashboard'))->assertSee('124');
     }
+
+    /** @test */
+    public function it_show_a_user()
+    {	
+        $this->withoutExceptionHandling();
+        $admin = UserFactory::withRole('admin')->create();
+        $user = factory(User::class)->create();
+        $this->actingAs($admin)->get(route('admin.users.show', $user->id))->assertSee($user->name);
+    }
+
 }

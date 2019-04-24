@@ -21,13 +21,13 @@
 .invalid-feedback{
    position: absolute;
    bottom: 0;
-   color: $color-warning;
+   color: $color-error;
    line-height: 1rem;
    font-size: $text-small;
    
 }
 .is-invalid{
-   border-color: $color-warning!important;
+   border-color: $color-error!important;
 }
 
 .form hr{

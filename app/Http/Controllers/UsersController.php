@@ -43,8 +43,7 @@ class UsersController extends Controller
     {
         $user = auth()->user();
         $user->editProfile($this->validateRequestProfile($request, $user));
-        toast('Profil edited', 'success', 'top-right');
-        return redirect(route('profile.index'));
+        return redirect(route('profile.index'))->with('succes', 'profil edited');
     }
     
 

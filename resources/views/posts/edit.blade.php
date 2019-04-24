@@ -8,6 +8,7 @@
 
       
 <div class="container">
+        @include('flash')
       <form class="form" method="POST" action="{{ route('posts.update', $post->id) }}">
           <h2>{{ __('Edit '). $post->title }} </h2>
           @csrf

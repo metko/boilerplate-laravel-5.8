@@ -5,11 +5,13 @@ namespace Tests\Unit;
 use App\Post;
 use App\Role;
 use App\User;
+use App\Comment;
 use App\Profile;
 use Tests\TestCase;
-use Facades\Tests\Setup\RoleFactory;
 use Facades\Tests\Setup\PostFactory;
+use Facades\Tests\Setup\RoleFactory;
 use Facades\Tests\Setup\UserFactory;
+use Facades\Tests\Setup\CommentFactory;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -95,10 +97,7 @@ class UserTest extends TestCase
     public function it_has_writter_level()
     {	
         $user = UserFactory::withRole('writer')->create();
-        $this->assertTrue($user->isWriter());
-       
-
-        
+        $this->assertTrue($user->isWriter());        
     }
 
     /** @test */
@@ -136,6 +135,45 @@ class UserTest extends TestCase
         $this->assertInstanceOf(Profile::class, $user->profile);
     }
 
-     
+    
+    /** @test */
+    public function it_has_remove_role()
+    {
+        $user = UserFactory::create();
+        $user->attachRole('moderator');
+        $this->assertCount(2, $user->roles);
+        $this->assertTrue($user->hasRole('guest'));
+        $this->assertTrue($user->hasRole('moderator'));
+        $user->removeRole('moderator');
+        $this->assertFalse($user->hasRole('moderator'));
+        $user->removeRole('guest');
+        $this->assertFalse($user->hasRole('guest'));
+        $this->assertFalse($user->hasRole('guest'));
+        $this->assertCount(0, $user->roles);
+    }
+
+    /** @test */
+    public function it_has_remove_all_role()
+    {
+        $user = UserFactory::create();
+        $user->attachRole('moderator');
+        $this->assertTrue($user->hasRole('guest'));
+        $this->assertTrue($user->hasRole('moderator'));
+        $user->removeAllRole('moderator');
+        $this->assertCount(0, $user->roles);
+    }
+
+    /** @test */
+    public function it_has_comments()
+    {	
+        $user = UserFactory::create();
+        $post = PostFactory::create();
+        $post2 = PostFactory::create();
+        $comments = CommentFactory::count(3)->withPost($post)->createdBy($user)->create();
+        $comments = CommentFactory::count(2)->withPost($post2)->createdBy($user)->create();
+        $this->assertInstanceOf(Comment::class, $user->comments->first());
+        $this->assertEquals(5, $user->comments->count());
+    }
+
 
 }

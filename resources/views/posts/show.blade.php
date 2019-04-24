@@ -19,6 +19,8 @@
       </div>
 
       <div class="container">
+            @include('flash')
+
             <p>{!! $post->body !!}</p>
             <hr>
             <h3>{{ $post->comments->count() }} comments</h3>

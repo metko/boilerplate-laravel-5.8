@@ -5,6 +5,7 @@
 
 
 <div class="container">
+        @include('flash')
         <form class="form" method="POST" action="{{ route('register') }}">
             <h2>{{ __('Register') }}</h2>
             @csrf

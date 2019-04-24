@@ -5,3 +5,29 @@
    padding: 2rem 3rem !important;
    border-radius: .5rem;
 }
+
+
+.card-success{
+   @extend .card;
+   color: white !important;
+   padding: 1rem 3rem !important;
+   background: $color-success;
+}
+.card-warning{
+   @extend .card;
+   color: white !important;
+   padding: 1rem 3rem !important;
+   background: $color-warning;
+}
+.card-error{
+   @extend .card;
+   color: white !important;
+   padding: 1rem 3rem !important;
+   background: $color-error;
+}
+.card-info{
+   @extend .card;
+   color: white !important;
+   padding: 1rem 3rem !important;
+   background: $color-info; 
+}

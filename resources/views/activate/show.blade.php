@@ -1,5 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-   <h1>Your account is desactivate</h1>
+   @include('flash')
+   <h1>Your account is desactivated</h1>
 @endsection

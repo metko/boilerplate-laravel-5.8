@@ -5,11 +5,12 @@
    
 
 <div class="container">
+        @include('flash')
+
         <form class="form" method="POST" action="{{ route('login') }}">
             <h2>{{ __('Login') }} </h2>
             @csrf
                 <fieldset>
-
                     <div class="form-control">
                         <label for="nameField">{{ __('E-Mail Address') }}</label>
                         <input value='{{ old('email') }}' type="email" id="email" name="email" class="{{ $errors->has('email') ? ' is-invalid' : '' }}">

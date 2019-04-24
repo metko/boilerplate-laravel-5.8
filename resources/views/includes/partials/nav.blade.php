@@ -30,6 +30,11 @@
                               <a class="" href="{{ route('profile.index') }}">
                                     {{ __('Profil') }}
                               </a>
+                              @admin
+                                    <a class="" href="{{ route('admin.dashboard') }}">
+                                          {{ __('Dasshboard') }}
+                                    </a>
+                              @endadmin
                               <a class="" href="{{ route('logout') }}"
                                     onclick="event.preventDefault();
                                     document.getElementById('logout-form').submit();">

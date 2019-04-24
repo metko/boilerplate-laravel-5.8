@@ -5,10 +5,10 @@ Route::resource('posts', 'PostController');
 
 Route::prefix('manage')->name('manage.')->group(function () {
         Route::get('posts', 'PostController@managePosts')
-                ->name('posts')->middleware('hasRole:writer');
+                ->name('posts')->middleware('hasRole:writer', 'activated');
 });
 
-Route::group(['middleware' => ['hasRole:guest']], function() {
+Route::group(['middleware' => ['hasRole:guest', 'activated']], function() {
         
         /** POST COMMENTS ROUTES */
         Route::post('/posts/{post}/comments', 'PostCommentsController@store')

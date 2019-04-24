@@ -39,12 +39,11 @@ class UnauthenticatedUserActionsTest extends TestCase
     /** @test */
     public function an_unauthenticated_user_cannot_update_accounts()
     {	
-        //$this->withoutExceptionHandling();
         $attributes = [
-            'email' => 'new@mail.com',
-            'name' => 'new name'
+            'name' => 'new name',
+            'email' => 'new@mail.com'
         ];
-        $this->patch( route('profile.update', $attributes))->assertStatus(403);  
+        $this->patch(route('profile.update', $attributes))->assertStatus(403);  
         $this->assertDatabaseMissing('users', $attributes);
     }
     

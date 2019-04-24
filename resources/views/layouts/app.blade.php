@@ -4,11 +4,14 @@
     <body>
         <div id="app" class="">
            @include('sweetalert::alert')
+          
            @include('includes.partials.nav')
 
-            <div class="content">
+            <div class="content">                
                 @yield('content')
             </div>
         </div>
+        <script src="{{ asset('js/app.js') }}" defer></script>
+        @stack('scripts')
     </body>
 </html>

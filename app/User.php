@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Role;
+use App\Comment;
 use App\Profile;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
@@ -94,7 +95,6 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function hasLevel($level)
     {   
-       
         foreach($this->roles as $role){
             if((int)$role->level >=  $level){
                 return true;
@@ -146,6 +146,23 @@ class User extends Authenticatable implements MustVerifyEmail
     public function editProfile($attributes)
     {  
         $this->update($attributes['user']);
-        $this->profile->update($attributes['profile']);
+        return $this->profile->update($attributes['profile']);
+    }
+
+    public function removeRole($role)
+    {
+        $role = Role::whereSlug(str::slug($role))->first();
+        $this->roles()->detach($role);
+        $this->refresh();
+    }
+
+    public function removeAllRole()
+    {
+        $this->roles()->detach();
+        $this->refresh();
+    }
+
+    public function comments(){
+        return $this->hasMany(Comment::class, 'owner_id');
     }
 }

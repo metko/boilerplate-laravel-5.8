@@ -9,11 +9,14 @@
    </div>
 
    <div class="container">
+        
+
          <div class="row">
                <div class="column column-25">
                   @include('users.sidebar', ['active' => 'password'])
                </div>
                <div class="column column-75">
+                  @include('flash')
                   <h3>Edit password</h3>
                      <form action="{{ route('profile.update.password') }}" method="POST">
                      @csrf

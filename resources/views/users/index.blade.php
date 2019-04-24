@@ -14,6 +14,8 @@
                   @include('users.sidebar', ['active' => 'informations'])
                </div>
                <div class="column column-75">
+                  @include('flash')
+
                    <h3>Profile</h3>
                   <div>
                      <strong>Username : </strong> {{ $user->name }}

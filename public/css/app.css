@@ -1121,13 +1121,13 @@ img {
 .invalid-feedback {
   position: absolute;
   bottom: 0;
-  color: red;
+  color: #A63A50;
   line-height: 1rem;
   font-size: 1.3rem;
 }
 
 .is-invalid {
-  border-color: red !important;
+  border-color: #A63A50 !important;
 }
 
 .form hr {
@@ -1152,12 +1152,36 @@ img {
     max-width: 60%;
   }
 }
-.card {
+.card, .card-info, .card-error, .card-warning, .card-success {
   max-width: 100%;
   margin: 0 auto;
   background: #f4f5f685;
   padding: 2rem 3rem !important;
   border-radius: 0.5rem;
+}
+
+.card-success {
+  color: white !important;
+  padding: 1rem 3rem !important;
+  background: #ACC196;
+}
+
+.card-warning {
+  color: white !important;
+  padding: 1rem 3rem !important;
+  background: #F1BF98;
+}
+
+.card-error {
+  color: white !important;
+  padding: 1rem 3rem !important;
+  background: #A63A50;
+}
+
+.card-info {
+  color: white !important;
+  padding: 1rem 3rem !important;
+  background: #42CAFD;
 }
 
 nav {
@@ -1185,7 +1209,7 @@ nav ul li {
   padding-right: 0;
 }
 
-.comments .card {
+.comments .card, .comments .card-success, .comments .card-warning, .comments .card-error, .comments .card-info {
   margin-bottom: 3rem;
   display: flex;
   align-items: center;

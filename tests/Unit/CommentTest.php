@@ -19,7 +19,6 @@ class CommentTest extends TestCase
     public function it_has_post()
     {	
         //$this->withoutExceptionHandling();
-       
         $comment = CommentFactory::create();
         $this->assertInstanceOf(Post::class, $comment->post);
     }

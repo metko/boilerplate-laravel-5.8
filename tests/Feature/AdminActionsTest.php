@@ -2,6 +2,8 @@
 
 namespace Tests\Feature;
 
+use App\Role;
+use App\User;
 use Tests\TestCase;
 use Facades\Tests\Setup\PostFactory;
 use Facades\Tests\Setup\UserFactory;
@@ -68,17 +70,29 @@ class AdminActionsTest extends TestCase
     /** @test */
     public function a_admin_can_update_infos_of_others_account()
     {	
+        //$this->withoutExceptionHandling();
         $admin = UserFactory::withRole('admin')->create();
-        $guest = UserFactory::withRole('guest')->create();
+        $guest = UserFactory::create();
         $attributes = [
             'email' => 'new@mail.com',
-            'name' => 'new name'
+            'name' => 'new name',
+            'first_name' => 'toto',
+            'bio' => 'La bio de toto',
+            'roles' => ['guest', 'moderator']
         ];
+
         $this->actingAs($admin)->patch(route('admin.users.update', $guest->id) , $attributes );
         $this->assertDatabasehas('users', [
             'name' => $attributes['name'],
-            'email'=> $attributes['email']
+            'email'=> $attributes['email'],
         ]);
+        $this->assertDatabasehas('profiles', [
+            'first_name' => $attributes['first_name'],
+            'bio' => $attributes['bio']
+        ]);
+        $guest->refresh();
+        $this->assertTrue($guest->hasRole('guest'));
+        $this->assertTrue($guest->hasRole('moderator'));
     }
 
     /** @test */
@@ -114,6 +128,57 @@ class AdminActionsTest extends TestCase
         $this->actingAs($admin)->post(route('admin.users.desactivate', $guest));
         $this->assertDatabaseHas('users', ['id' => $guest->id, 'activated' => false]);
     }
+
+    /** @test */
+    public function a_admin_can_create_user()
+    {	
+        $this->withoutExceptionHandling();
+        $admin = UserFactory::withRole('admin')->create();
+        $attributes = [
+            'name' => 'toto',
+            'email' => 'toto@toto.com',
+            'password' => 'totototo',
+            'password_confirmation' => 'totototo',
+            'first_name' => 'toto',
+            'last_name' => 'toto',
+            'location' => 'unknow',
+            'bio' => 'voila une bio',
+            'roles' => ['guest','writer','moderator']
+        ];
+        $this->actingAs($admin)->post(route('admin.users.store', $attributes));
+        $user = User::whereName($attributes['name'])->first();
+        $this->assertDatabaseHas('users', ['name' => $user->name]);
+        $this->assertDatabaseHas('profiles', ['user_id' => $user->id, 'first_name' => $user->profile->first_name]);
+        $this->assertTrue($user->hasRole( 'guest'));
+        $this->assertTrue($user->hasRole( 'writer'));
+        $this->assertTrue($user->hasRole( 'moderator'));
+    }
+
+    /** @test */
+    public function a_admin_can_update_his_info()
+    {	
+        $this->withoutExceptionHandling();
+        $admin = UserFactory::withRole('admin')->create();
+        $attributes = [
+            'name' => 'toto',
+            'email' => 'toto@toto.com',
+            'password' => 'totototo',
+            'password_confirmation' => 'totototo',
+            'first_name' => 'toto',
+            'last_name' => 'toto',
+            'location' => 'unknow',
+            'bio' => 'voila une bio',
+            'roles' => ['guest','writer','moderator', 'admin']
+        ];
+        $this->actingAs($admin)->patch(route('admin.users.admin.update', $attributes));
+        $this->assertDatabaseHas('users', ['name' =>  $attributes['name'], 'email' =>$attributes['email'] ]);
+        $this->assertDatabaseHas('profiles', ['first_name' =>  $attributes['first_name'], 'location' =>$attributes['location'] ]);
+
+    }
+    
+    
+
+    
 
 
 }
