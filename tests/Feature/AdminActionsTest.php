@@ -28,6 +28,7 @@ class AdminActionsTest extends TestCase
     /** @test */
     public function a_admin_can_see_a_post_on_dashboard()
     {	
+        //$this->withoutExceptionHandling();
         $admin = UserFactory::withRole('admin')->create();
         $post = PostFactory::create();
         $this->actingAs($admin)->get($post->path('admin'))->assertSee($post->title);

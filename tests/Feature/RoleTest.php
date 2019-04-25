@@ -6,6 +6,7 @@ use App\Role;
 use App\User;
 use App\Permission;
 use Tests\TestCase;
+use Facades\Tests\Setup\PermissionFactory;
 use Facades\Tests\Setup\RoleFactory;
 use Facades\Tests\Setup\UserFactory;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -38,9 +39,7 @@ class RoleTest extends TestCase
     public function it_has_permissions()
     {
         $this->withoutExceptionHandling();
-        $role = RoleFactory::create('writer');
-        $permission = factory(Permission::class)->create();
-        $role->permissions()->attach($permission);
+        $role = RoleFactory::withPermissions()->create('writer');
         $this->assertInstanceOf(Permission::class, $role->permissions->first());
     }
 
@@ -51,7 +50,7 @@ class RoleTest extends TestCase
     {
         $this->withoutExceptionHandling();
         $role = RoleFactory::create('writer');
-        $permission = factory(Permission::class)->create();
+        $permission = PermissionFactory::create();
         $role->attachPermissions($permission);
         $this->assertInstanceOf(Permission::class, $role->permissions->first());
     }
@@ -60,11 +59,8 @@ class RoleTest extends TestCase
     public function it_can_detach_a_permission()
     {
         $this->withoutExceptionHandling();
-        $role = RoleFactory::create('writer');
-        $permission = factory(Permission::class)->create();
-        $role->attachPermissions($permission);
-        $this->assertInstanceOf(Permission::class, $role->permissions->first());
-        $role->detachPermissions($permission);
+        $role = RoleFactory::withPermissions()->create('writer');
+        $role->detachPermissions($role->permissions->first());
         $this->assertInstanceOf(Permission::class, $role->permissions->first());
     }
 
@@ -73,10 +69,8 @@ class RoleTest extends TestCase
     {
         $this->withoutExceptionHandling();
         $role = RoleFactory::create('writer');
-        $permission1 = factory(Permission::class)->create();
-        $permission2 = factory(Permission::class)->create();
-        $role->attachPermissions([$permission1, $permission2]);
-        $this->assertInstanceOf(Permission::class, $role->permissions->first());
+        $permissions = PermissionFactory::count(2)->create();
+        $role->attachPermissions([$permissions[0], $permissions[1]]);
         $this->assertCount(2, $role->permissions);
     }
 
@@ -84,11 +78,8 @@ class RoleTest extends TestCase
     public function it_can_detach_all_permissions()
     {
         $this->withoutExceptionHandling();
-        $role = RoleFactory::create('writer');
-        $permission1 = factory(Permission::class)->create();
-        $permission2 = factory(Permission::class)->create();
-        $role->attachPermissions([$permission1, $permission2]);
-        $this->assertCount(2, $role->permissions);
+        $role = RoleFactory::withPermissions(3)->create('writer');
+        $this->assertCount(3, $role->permissions);
         $role->detachPermissions();
         $role->refresh();
         $this->assertCount(0, $role->permissions);
