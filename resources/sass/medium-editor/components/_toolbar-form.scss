@@ -27,6 +27,7 @@
             border: none;
             box-shadow: none;
             outline: 0;
+
         }
     }
 
@@ -41,4 +42,7 @@
 
 .medium-editor-toolbar-form-active {
     display: block;
+}
+#medium-editor{
+    display:none;
 }

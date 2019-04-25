@@ -2,10 +2,11 @@
 
 namespace Tests\Feature;
 
+use App\Role;
 use Tests\TestCase;
-use Facades\Tests\Setup\CommentFactory;
-use Facades\Tests\Setup\UserFactory;
 use Facades\Tests\Setup\PostFactory;
+use Facades\Tests\Setup\UserFactory;
+use Facades\Tests\Setup\CommentFactory;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -63,6 +64,26 @@ class SuperAdminActionsTest extends TestCase
         $this->actingAs($superAdmin)
             ->patch( $post->comments->first()->path(), ['body' => 'Comment changed from super-admin'])->assertRedirect($post->path());
         $this->assertDatabaseHas('comments', ['body' => 'Comment changed from super-admin']);  
+    }
+
+
+
+    /** @test */
+    // public function a_superadmin_can_create_roles()
+    // {	
+    //     $superAdmin = UserFactory::withRole('super-admin')->create();
+    //     $this->actingAs($superAdmin)
+    //         ->post(route('admin.roles.create'), ['name' => 'Comment changed from super-admin'])->assertRedirect($post->path());
+    // }
+    
+    /** @test */
+    public function a_superadmin_can_see_roles()
+    {	
+        $this->withoutExceptionHandling();
+        $superAdmin = UserFactory::withRole('super-admin')->create();
+        $roles = Role::all();
+        $this->actingAs($superAdmin)
+            ->get(route('admin.roles.index'))->assertSee($roles->first()->name);
     }
 
 }

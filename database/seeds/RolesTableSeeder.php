@@ -17,7 +17,7 @@ class RolesTableSeeder extends Seeder
         $i = 0;
         foreach($this->roles as $role){
             factory(Role::class)->create([
-                'name' => $role,
+                'name' => ucfirst($role),
                 'slug' => str_slug($role),
                 'level' => $i,
                 'description' => 'Description of '.$role.'.'

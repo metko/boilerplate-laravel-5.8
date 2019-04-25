@@ -35,6 +35,7 @@
       @endadmin
 
         <section class="section">
+          @include('flash')
           @yield('content')
         </section>
 

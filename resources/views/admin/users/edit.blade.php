@@ -51,8 +51,7 @@
                                     <button class="btn btn-sm btn-danger btn-inline">Delete</button>
                                  </form>
                            </div>      
-                        </div>
-                     
+                        </div> 
                      </div>
             </div>
             <div class="col-lg-8 col-md-12 col-12 col-sm-12">

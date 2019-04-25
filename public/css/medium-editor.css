@@ -282,6 +282,10 @@
   display: block;
 }
 
+#medium-editor {
+  display: none;
+}
+
 .medium-editor-toolbar-actions:after {
   clear: both;
   content: "";
@@ -291,6 +295,15 @@
 .medium-editor-element {
   word-wrap: break-word;
   min-height: 30px;
+  background-clip: padding-box;
+  border: 1px solid #e4e6fc;
+  border-radius: 0.25rem;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  color: #495057;
+  padding: 10px 15px;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
 }
 
 .medium-editor-element img {
@@ -311,16 +324,16 @@
 
 .medium-toolbar-arrow-under:after {
   top: 60px;
-  border-color: #57ad68 transparent transparent transparent;
+  border-color: #95a0f4 transparent transparent transparent;
 }
 
 .medium-toolbar-arrow-over:before {
   top: -8px;
-  border-color: transparent transparent #57ad68 transparent;
+  border-color: transparent transparent #95a0f4 transparent;
 }
 
 .medium-editor-toolbar {
-  background-color: #57ad68;
+  background-color: #95a0f4;
 }
 
 .medium-editor-toolbar li {
@@ -331,19 +344,19 @@
   min-width: 60px;
   height: 60px;
   border: none;
-  border-right: 1px solid #9ccea6;
+  border-right: 1px solid #f1f3fe;
   background-color: transparent;
   color: #fff;
   transition: background-color 0.2s ease-in, color 0.2s ease-in;
 }
 
 .medium-editor-toolbar li button:hover {
-  background-color: #346a3f;
+  background-color: #394dea;
   color: #fff;
 }
 
 .medium-editor-toolbar li .medium-editor-button-active {
-  background-color: #23482a;
+  background-color: #172dd9;
   color: #fff;
 }
 
@@ -353,7 +366,7 @@
 
 .medium-editor-toolbar-form .medium-editor-toolbar-input {
   height: 60px;
-  background: #57ad68;
+  background: #95a0f4;
   color: #fff;
 }
 
@@ -384,11 +397,11 @@
 }
 
 .medium-editor-toolbar-anchor-preview {
-  background: #57ad68;
+  background: #95a0f4;
   color: #fff;
 }
 
 .medium-editor-placeholder:after {
-  color: #9ccea6;
+  color: #f1f3fe;
 }
 

@@ -26,8 +26,11 @@
                      {{ $user->email}}
                </td>
                <td>
-                  <a href="{{route('admin.users.show', $user->id)}}" class="btn btn-primary btn-action mr-1" data-toggle="tooltip" title="" data-original-title="See"><i class="fas fa-usser-alt"></i></a>
-                  <a href="{{route('admin.users.edit', $user->id)}}" class="btn btn-primary btn-action mr-1" data-toggle="tooltip" title="" data-original-title="Edit"><i class="fas fa-pencil-alt"></i></a>
+    
+                  <div class="btn-group mb-3 btn-group-sm" role="group" aria-label="Basic example">
+                        <a href="{{route('admin.users.show', $user->id)}}"  class="btn btn-primary">Show</a>
+                        <a href="{{route('admin.users.edit', $user->id)}}"  class="btn btn-info">Edit</a>
+                      </div>
                </td>
                </tr>
                @empty

@@ -4,7 +4,7 @@
    @endphp
 @endempty
 
-<div class="form-group col-md-{{ $size ?? 6}} col-12">
+<div class="form-group col-sm-12 col-md-{{ $size ?? 6}} col-12">
       <label class="{{ $label_class ?? ""}}">{{ $label ?? ucfirst($name)}}</label>
         
       @if($type == "textarea")
@@ -29,7 +29,7 @@
             @endforeach
             @error('roles')
                   <span class="invalid-feedback">{{ $message }}</span>
-               @enderror
+            @enderror
 
          @elseif($type == "radio")
          <div>
@@ -41,7 +41,7 @@
          </div>
          @else
 
-            <input value="{{ $value}}" type="{{ $type ?? 'text' }}" class="form-control {{ $errors->has($name) ? ' is-invalid' : '' }}" name="{{$name}}">
+            <input value="{{ $value}}" type="{{ $type ?? 'text' }}" class="form-control {{ $input_class ?? '' }} {{ $errors->has($name) ? ' is-invalid' : '' }}" name="{{$name}}">
 
          @endif
          

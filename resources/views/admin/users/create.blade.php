@@ -48,16 +48,6 @@
                             <div class="row">
                                  @input(['label'=>'Bio', 'name' => 'bio', 'value' => old('bio'), "type" => "textarea", "size" => 12])   
                             </div>
-                            <div class="row">
-                                 <select class="form-control selectric">
-                                       <option>Option 1</option>
-                                       <option>Option 2</option>
-                                       <option>Option 3</option>
-                                       <option>Option 4</option>
-                                       <option>Option 5</option>
-                                       <option>Option 6</option>
-                                     </select>   
-                            </div>
                         </div>
                            <div class="card-footer text-left">
                                  <button type="submit" class="btn btn-primary">Create user</button>

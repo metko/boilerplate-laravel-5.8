@@ -2,12 +2,20 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Role;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Admin\AdminController;
 
 class UsersAdminController extends AdminController
 {
+
+    public function edit(User $user)
+    {
+        $roles = Role::all();
+       return view('admin.users.edit', compact('user', 'roles'));
+    }
     public function update(Request $request){
         $user = Auth::user();
         $attributes = $this->validate($request, [
@@ -45,6 +53,5 @@ class UsersAdminController extends AdminController
         }else{
             abort(500);
         }
-        
     }
 }

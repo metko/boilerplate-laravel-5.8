@@ -15,12 +15,26 @@
              <li><a class="nav-link" href="index.html">Ecommerce Dashboard</a></li>
            </ul>
          </li>
-         <li class="menu-header">Users</li>
+         <li class="menu-header">Models</li>
          <li class="nav-item dropdown">
            <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-users"></i> <span>Users</span></a>
            <ul class="dropdown-menu">
               <li><a class="nav-link" href="{{ route('admin.users.create') }}">Create</a></li>
               <li><a class="nav-link" href="{{ route('admin.users.index') }}">List</a></li>
+           </ul>
+         </li>
+         <li class="nav-item dropdown">
+           <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-feather"></i> <span>Posts</span></a>
+           <ul class="dropdown-menu">
+              <li><a class="nav-link" href="{{ route('admin.posts.create') }}">Create</a></li>
+              <li><a class="nav-link" href="{{ route('admin.posts.index') }}">List</a></li>
+           </ul>
+         </li>
+         <li class="nav-item dropdown">
+           <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-user-secret"></i> <span>Roles</span></a>
+           <ul class="dropdown-menu">
+              <li><a class="nav-link" href="{{ route('admin.posts.create') }}">Create</a></li>
+              <li><a class="nav-link" href="{{ route('admin.roles.index') }}">List</a></li>
            </ul>
          </li>
        </ul>

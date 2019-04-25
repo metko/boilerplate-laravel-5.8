@@ -5,8 +5,10 @@ namespace Tests\Unit;
 use App\Post;
 use App\User;
 use App\Comment;
+use App\PostStatus;
 use Tests\TestCase;
 use Illuminate\Support\Str;
+use Illuminate\Support\Carbon;
 use Facades\Tests\Setup\PostFactory;
 use Facades\Tests\Setup\UserFactory;
 use Facades\Tests\Setup\CommentFactory;
@@ -22,6 +24,12 @@ class PostTest extends TestCase
     {	
         $post = PostFactory::create();
         $this->assertEquals('/posts/' . $post->id, $post->path());
+    }
+    /** @test */
+    public function it_has_path_admin()
+    {	
+        $post = PostFactory::create();
+        $this->assertEquals('/admin/posts/' . $post->id, $post->path('admin'));
     }
 
     /** @test */
@@ -66,5 +74,26 @@ class PostTest extends TestCase
         $post = PostFactory::withComments(2)->create();
         $this->assertInstanceOf(Comment::class, $post->comments->first());
         $this->assertEquals(2, $post->comments->count());
+    }
+
+    // /** @test */
+    // public function it_has_status()
+    // {	
+    //     $this->withoutExceptionHandling();  
+    //     $post = PostFactory::create();
+    //     $this->assertInstanceOf(PostStatus::class, $post->status);
+
+    // }
+
+    /** @test */
+    public function it_has_last_update()
+    {	
+        $date = Carbon::now();
+        $post = PostFactory::withComments(2)->create([
+            'created_at' => $date
+        ]);
+        $date = $post->created_at->locale('pt');
+        $date = ucfirst($date->shortDayName)." ".$date->day." ".ucfirst($date->shortMonthName)." ".$date->year;
+        $this->assertEquals($date, $post->lastUpdate());
     }
 }

@@ -24,6 +24,12 @@ Route::group(['middleware' => ['hasRole:admin', 'activated']], function() {
                 Route::post('users/desactivate/{user}', 'UsersController@desactivate')->name('users.desactivate');
                
                 Route::delete('users/{user}', 'UsersController@destroy')->name('users.destroy');
+
+
+                Route::resource('posts', 'PostController');
+
+
+                Route::get('roles', 'RolesController@index')->name('roles.index');
         });
 });
 /** END ADMLIN ROURES */

@@ -16,11 +16,13 @@ class CreatePostsTable extends Migration
         Schema::create('posts', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('owner_id');
+            //$table->unsignedBigInteger('status_id');
             $table->string('title');
             $table->longText('body');
             $table->timestamps();
 
             $table->foreign('owner_id')->references('id')->on('users')->onDelete('cascade');
+            //$table->foreign('status_id')->references('id')->on('post_status');
         });
     }
 

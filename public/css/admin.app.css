@@ -6827,3 +6827,13 @@ tr:first-child > td > .fc-day-grid-event {
   }
 }
 
+.alert {
+  position: absolute;
+  z-index: 99;
+  top: -60px;
+  width: 500px;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+}
+

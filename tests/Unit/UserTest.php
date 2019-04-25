@@ -20,14 +20,21 @@ class UserTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function it_has_a_role()
+    public function a_user_has_a_role()
     {	
-        $user = UserFactory::withRole("guest")->create();
+        $user = UserFactory::create();
         $this->assertInstanceOf(Role::class, $user->roles->first());
+    }
+    /** @test */
+    public function a_user_has_admin_path()
+    {
+        $user = UserFactory::create();
+        $this->assertEquals(route('admin.users.show', $user->id), $user->adminPath() );
+    
     }
 
     /** @test */
-    public function it_can_attach_roles()
+    public function a_user_can_attach_roles()
     {	
         $user = UserFactory::create();
         $user->attachRole("moderator");
@@ -38,7 +45,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function has_activate()
+    public function a_user_has_activate()
     {	
         $user = UserFactory::create();
         $user->activate();
@@ -47,7 +54,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function has_desactivate()
+    public function a_user_has_desactivate()
     {	
         $user = UserFactory::create(['activated' => 1]);
         $user->desactivate();
@@ -55,14 +62,14 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function it_has_has_role()
+    public function a_user_has_has_role()
     {	
         $user = UserFactory::create();
         $this->assertTrue($user->hasRole('guest'));
     }
 
     /** @test */
-    public function it_has_has_level()
+    public function a_user_has_has_level()
     {	
         $user = UserFactory::withRole('admin')->create();
         //dd($user->roles);
@@ -70,7 +77,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function it_cant_attach_roles_that_doesnt_exists()
+    public function a_user_cant_attach_roles_that_doesnt_exists()
     {	
         $user = UserFactory::create();
         $user->attachRole("fake-role");
@@ -78,7 +85,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function it_has_guest_level()
+    public function a_user_has_guest_level()
     {	
         $user = UserFactory::withRole('guest')->create();
         $this->assertTrue($user->isGuest());
@@ -87,35 +94,35 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function it_has_moderator_level()
+    public function a_user_has_moderator_level()
     {	
         $user = UserFactory::withRole('moderator')->create();
         $this->assertTrue($user->isModerator());
     }
 
     /** @test */
-    public function it_has_writter_level()
+    public function a_user_has_writter_level()
     {	
         $user = UserFactory::withRole('writer')->create();
         $this->assertTrue($user->isWriter());        
     }
 
     /** @test */
-    public function it_has_admin_level()
+    public function a_user_has_admin_level()
     {	
         $user = UserFactory::withRole('admin')->create();
         $this->assertTrue($user->isAdmin());
     }
 
     /** @test */
-    public function it_has_superAdmin_level()
+    public function a_user_has_superAdmin_level()
     {	
         $user = UserFactory::withRole('super-admin')->create();
         $this->assertTrue($user->isSuperAdmin());
     }
 
     /** @test */
-    public function it_has_posts()
+    public function a_user_has_posts()
     {	
         $user = UserFactory::withRole('writer')->create();
         $post = PostFactory::ownedBy($user)->create();
@@ -123,21 +130,21 @@ class UserTest extends TestCase
     }
     
     /** @test */
-    public function it_has_gravatar()
+    public function a_user_has_gravatar()
     {	
         $user = UserFactory::withRole('writer')->create(); 
         $this->assertEquals($user->gravatar(), 'https://www.gravatar.com/avatar/' . md5($user->email) . '?d=mm&s=100');
     }
 
     /** @test */
-    public function it_has_profile(){
+    public function a_user_has_profile(){
         $user = UserFactory::create(); 
         $this->assertInstanceOf(Profile::class, $user->profile);
     }
 
     
     /** @test */
-    public function it_has_remove_role()
+    public function a_user_has_remove_role()
     {
         $user = UserFactory::create();
         $user->attachRole('moderator');
@@ -153,7 +160,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function it_has_remove_all_role()
+    public function a_user_has_remove_all_role()
     {
         $user = UserFactory::create();
         $user->attachRole('moderator');
@@ -164,7 +171,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function it_has_comments()
+    public function a_user_has_comments()
     {	
         $user = UserFactory::create();
         $post = PostFactory::create();

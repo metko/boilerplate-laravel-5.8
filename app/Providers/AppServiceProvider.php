@@ -29,6 +29,7 @@ class AppServiceProvider extends ServiceProvider
         User::observe(UserObserver::class);
         
         Blade::include('admin.components.form.input', 'input');
+        Blade::include('admin.components.form.inputLine', 'inputLine');
 
         Blade::if('superAdmin', function () {
             return auth()->check() && auth()->user()->isSuperAdmin() ;

@@ -22,10 +22,22 @@ class UserFactory{
       return $this;
    }
 
+   public function withCount($count)
+   {
+      $this->count = $count;
+      return $this;
+   }
+
    public function create($attributes = []){
       
-      $user = factory(User::class)->create($attributes);
-      $user->attachRole(Str::slug($this->role));
-      return $user;
+      $users = factory(User::class, $this->count ?? 1)->create($attributes);
+      if(!empty($this->count)){
+         foreach($users as $user){
+            $user->attachRole(Str::slug($this->role));
+         }
+         return $users;
+      }
+      $users->first()->attachRole(Str::slug($this->role));
+      return $users->first();
    }
 }

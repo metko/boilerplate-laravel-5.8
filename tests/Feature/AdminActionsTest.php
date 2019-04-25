@@ -18,6 +18,22 @@ class AdminActionsTest extends TestCase
 
 
     /** @test */
+    public function a_admin_can_see_all_the_posts_on_dashboard()
+    {	
+        $admin = UserFactory::withRole('admin')->create();
+        $post = PostFactory::create();
+        $this->actingAs($admin)->get(route('admin.posts.index'))->assertSee($post->title);
+    }
+
+    /** @test */
+    public function a_admin_can_see_a_post_on_dashboard()
+    {	
+        $admin = UserFactory::withRole('admin')->create();
+        $post = PostFactory::create();
+        $this->actingAs($admin)->get($post->path('admin'))->assertSee($post->title);
+    }
+
+    /** @test */
     public function a_admin_can_create_post()
     {
         $this->withoutExceptionHandling();
@@ -25,11 +41,17 @@ class AdminActionsTest extends TestCase
         //update post 
         $this->actingAs($admin)
             ->post("/posts", ['title' => 'title', 'body' => "body"]);
-        $this->assertDatabaseHas('posts', ['title' =>  "title", 'body' => "body" ]);  
+        $this->assertDatabaseHas('posts', ['title' =>  "title", 'body' => "body" ]);
+        
+        $this->actingAs($admin)
+            ->post(route('admin.posts.store'), ['title' => 'title changed', 'body' => "body changed"]);
+        $this->assertDatabaseHas('posts', ['title' =>  "title changed", 'body' => "body changed" ]); 
     }
     /** @test */
     public function a_admin_can_manage_a_post_from_others()
     {	
+        $this->withoutExceptionHandling();
+
         $admin = UserFactory::withRole('admin')->create();
         $post = PostFactory::create();
         //update post 
@@ -37,6 +59,9 @@ class AdminActionsTest extends TestCase
             ->patch($post->path(), ['title' => 'title changed', 'body' => "body changed"]);
         $this->assertDatabaseHas('posts', ['title' =>  "title changed", 'body' => "body changed" ]);
 
+        $this->actingAs($admin)
+            ->patch($post->path('admin'), ['title' => 'title changed again', 'body' => "body changed again"]);
+        $this->assertDatabaseHas('posts', ['title' =>  "title changed again", 'body' => "body changed again" ]);
         //delete post
         $this->actingAs($admin)->delete($post->path());
         $this->assertDatabaseMissing('posts', ['title' =>  $post->title]);

@@ -8,7 +8,7 @@ use Illuminate\Support\Str;
 class RoleFactory{
 
    protected $roles = ['Guest', 'Moderator', 'Writer', 'Admin', 'Super-Admin'];
-
+   protected $level = 1;
    public function create($roles = null, $level = null){
       if(is_null($roles)){
          $i = 0;
@@ -33,7 +33,7 @@ class RoleFactory{
          return factory(Role::class)->create([
             'name' => Str::title($roles),
             'slug' =>  Str::slug($roles),
-            'level' => $level
+            'level' => $this->level
          ]);;
       }
    

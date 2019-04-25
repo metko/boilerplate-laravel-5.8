@@ -44,6 +44,8 @@ class PostFactory{
          ]);
       }
 
+      
+
       return $post;
    }
 }

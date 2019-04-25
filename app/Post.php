@@ -8,13 +8,22 @@ class Post extends Model
 {
     protected $guarded = [];  
 
-    public function path(){
+    public function path($admin = null){
+        if($admin) {
+            return "/admin/posts/".$this->id;
+        }
         return "/posts/".$this->id;
     }
 
     public function owner()
     {
         return $this->belongsTo(User::class);
+    }
+
+
+    public function status()
+    {
+        return $this->belongsTo(PostStatus::class);
     }
 
     public function comments()
@@ -43,4 +52,11 @@ class Post extends Model
             'owner_id' => auth()->user()->id,
         ]);
     }
+
+    public function lastUpdate()
+    {
+        $date = $this->updated_at->locale('pt');
+        return ucfirst($date->shortDayName)." ".$date->day." ".ucfirst($date->shortMonthName)." ".$date->year;
+    }
+
 }

@@ -56,6 +56,11 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Post::class, 'owner_id');
     }
 
+    public function adminPath()
+    {
+        return route('admin.users.show', $this->id);
+    }
+
     public function attachRole($roleName)
     { 
         if(is_array($roleName)){

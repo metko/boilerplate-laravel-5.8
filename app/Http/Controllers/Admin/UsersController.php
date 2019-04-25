@@ -117,7 +117,7 @@ class UsersController extends AdminController
             foreach($attributes['roles'] as $role) {
                 $user->attachRole($role);
             }
-            return redirect(route('admin.users.index'))->with('success', 'User created');
+            return redirect($user->adminPath())->with('success', 'User created');
         }else{
             abort(500);
         }
@@ -142,8 +142,8 @@ class UsersController extends AdminController
     public function destroy(User $user, Request $request)
     {
         $user = User::find($user->id);
-        if($user){
-            $user->delete();
+        if($user && $user->delete()){
+            return redirect(route('admin.users.index'))->with('success', 'User deleted');
         }else{
             //TODO RETURN ERROR
         }

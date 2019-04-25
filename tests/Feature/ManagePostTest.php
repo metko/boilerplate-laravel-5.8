@@ -16,12 +16,11 @@ class ManagePostTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function can_view_all_the_posts()
+    public function can_view_all_the_posts_only_published()
     {	
-        $post1 = PostFactory::create();
+        $post = PostFactory::create();
         $this->get(route('posts.index'))
-                ->assertSee($post1->title);
-               
+                ->assertSee($post->title); 
     }
 
     /** @test */
@@ -38,7 +37,5 @@ class ManagePostTest extends TestCase
 
         $this->assertDatabaseMissing('posts', ['owner_id' =>  $user->id]);
     }
-
-    
 
 }
