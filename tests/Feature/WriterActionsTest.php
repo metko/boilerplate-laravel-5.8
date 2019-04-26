@@ -5,11 +5,13 @@ namespace Tests\Feature;
 use App\Post;
 use App\Role;
 use App\User;
+use App\Permission;
 use Tests\TestCase;
 use Facades\Tests\Setup\PostFactory;
 use Facades\Tests\Setup\UserFactory;
 use Illuminate\Support\Facades\Hash;
 use Facades\Tests\Setup\CommentFactory;
+use Facades\Tests\Setup\PermissionFactory;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -21,6 +23,9 @@ class WriterActionsTest extends TestCase
     public function a_writter_can_create_a_post()
     {	
         $writer = UserFactory::withRole('writer')->create();
+        PermissionFactory::all();
+        $action = Permission::whereSlug('post.create')->first();
+        $writer->roles->first()->attachPermissions($action);
         $post = ['title' => 'new title', 'body' => "new body"];
         
         $this->actingAs($writer)->post('/posts', $post);
@@ -32,7 +37,11 @@ class WriterActionsTest extends TestCase
     {	
         $writer = UserFactory::withRole('writer')->create();
         $post = PostFactory::ownedBy($writer)->create();
-        
+        PermissionFactory::all();
+        $action = Permission::whereSlug('post.delete')->first();
+        $writer->roles->first()->attachPermissions($action);
+        //dd($writer->roles->first()->permissions);
+
         $this->actingAs($writer)->delete($post->path())->assertStatus(302);
         $this->assertDatabaseMissing('posts', ['title' =>  $post->title]);
     }
@@ -128,6 +137,11 @@ class WriterActionsTest extends TestCase
     public function a_writer_can_access_to_manage_posts_page()
     {	
         $writer = UserFactory::withRole('writer')->create();
+        $writer->attachRole('writer');
+        PermissionFactory::all();
+        $createPost = Permission::whereSlug('post.create')->first();
+
+        $writer->roles->first()->attachPermissions($createPost);
         $this->actingAs($writer)->get(route('manage.posts'))
             ->assertStatus(200);
     }
@@ -137,7 +151,10 @@ class WriterActionsTest extends TestCase
     {	
         //$this->withoutExceptionHandling();
         $user = UserFactory::withRole('moderator')->create();
+        PermissionFactory::all();
+        $createPost = Permission::whereSlug('post.create')->first();
         $user->attachRole('writer');
+        $user->roles->first()->attachPermissions($createPost);
         $this->actingAs($user)->get(route('manage.posts'))
             ->assertStatus(200);
     }

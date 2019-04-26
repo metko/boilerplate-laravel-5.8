@@ -19,7 +19,6 @@ class RoleTest extends TestCase
     /** @test */
     public function it_has_getClass()
     {
-        $this->withoutExceptionHandling();
         RoleFactory::create();
         $role = Role::first();
         $this->assertEquals('light', $role->getClass());
@@ -28,27 +27,21 @@ class RoleTest extends TestCase
     /** @test */
     public function it_has_users()
     {
-        //$this->withoutExceptionHandling();
-        $users = UserFactory::withCount(3)->withRole('writer')->create();
+        $users = UserFactory::withRole('writer')->create();
         $role = Role::whereSlug('writer')->first();
-        $this->assertEquals(3, $role->users->count());
         $this->assertInstanceOf(User::class, $role->users->first());
     }
 
     /** @test */
     public function it_has_permissions()
     {
-        $this->withoutExceptionHandling();
         $role = RoleFactory::withPermissions()->create('writer');
         $this->assertInstanceOf(Permission::class, $role->permissions->first());
     }
 
-    
-
     /** @test */
     public function it_can_attach_a_permission()
     {
-        $this->withoutExceptionHandling();
         $role = RoleFactory::create('writer');
         $permission = PermissionFactory::create();
         $role->attachPermissions($permission);
@@ -58,7 +51,6 @@ class RoleTest extends TestCase
     /** @test */
     public function it_can_detach_a_permission()
     {
-        $this->withoutExceptionHandling();
         $role = RoleFactory::withPermissions()->create('writer');
         $role->detachPermissions($role->permissions->first());
         $this->assertInstanceOf(Permission::class, $role->permissions->first());
@@ -67,7 +59,6 @@ class RoleTest extends TestCase
     /** @test */
     public function it_can_attach_permissions()
     {
-        $this->withoutExceptionHandling();
         $role = RoleFactory::create('writer');
         $permissions = PermissionFactory::count(2)->create();
         $role->attachPermissions([$permissions[0], $permissions[1]]);
@@ -77,18 +68,23 @@ class RoleTest extends TestCase
     /** @test */
     public function it_can_detach_all_permissions()
     {
-        $this->withoutExceptionHandling();
         $role = RoleFactory::withPermissions(3)->create('writer');
-        $this->assertCount(3, $role->permissions);
         $role->detachPermissions();
-        $role->refresh();
         $this->assertCount(0, $role->permissions);
-
     }
 
-    
-
-    
-
+    /** @test */
+    public function a_role_must_have_permissions()
+    {	
+        $this->withoutExceptionHandling();
+        $superAdmin = UserFactory::withRole('super-admin')->create();
+        $role = Role::whereLevel(2)->first();
+        $attributes = [
+            "permissions" => []
+        ];
+        $this->actingAs($superAdmin)
+            ->patch(route('admin.permissions.update', $role->id), $attributes)
+            ->assertRedirect(route('admin.roles.show', $role->id));
+    }
 
 }

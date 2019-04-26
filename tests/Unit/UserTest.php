@@ -38,9 +38,8 @@ class UserTest extends TestCase
     {	
         $user = UserFactory::create();
         $user->attachRole("moderator");
-        $this->assertEquals("moderator" , $user->roles->last()->slug);
         $this->assertEquals("Moderator" , $user->roles->last()->name);
-        $this->assertEquals(1 , $user->roles->last()->level);
+        $this->assertEquals(2 , $user->roles->last()->level);
         $this->assertCount(2, $user->roles);
     }
 
@@ -65,7 +64,7 @@ class UserTest extends TestCase
     public function a_user_has_has_role()
     {	
         $user = UserFactory::create();
-        $this->assertTrue($user->hasRole('guest'));
+        $this->assertTrue($user->hasRole('member'));
     }
 
     /** @test */
@@ -149,13 +148,12 @@ class UserTest extends TestCase
         $user = UserFactory::create();
         $user->attachRole('moderator');
         $this->assertCount(2, $user->roles);
-        $this->assertTrue($user->hasRole('guest'));
+        $this->assertTrue($user->hasRole('member'));
         $this->assertTrue($user->hasRole('moderator'));
         $user->removeRole('moderator');
         $this->assertFalse($user->hasRole('moderator'));
-        $user->removeRole('guest');
-        $this->assertFalse($user->hasRole('guest'));
-        $this->assertFalse($user->hasRole('guest'));
+        $user->removeRole('member');
+        $this->assertFalse($user->hasRole('member'));
         $this->assertCount(0, $user->roles);
     }
 
@@ -164,9 +162,9 @@ class UserTest extends TestCase
     {
         $user = UserFactory::create();
         $user->attachRole('moderator');
-        $this->assertTrue($user->hasRole('guest'));
+        $this->assertTrue($user->hasRole('member'));
         $this->assertTrue($user->hasRole('moderator'));
-        $user->removeAllRole('moderator');
+        $user->removeAllRole();
         $this->assertCount(0, $user->roles);
     }
 

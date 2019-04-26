@@ -7,13 +7,16 @@ use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
+
     public function index(){
+        //$this->authorize('view', Post::class);
         $posts = Post::latest()->get();
         return view('posts.index', compact('posts'));
     }
 
     public function show(Post $post)
     {	
+        //$this->authorize('view', Post::class);
         return view('posts.show', compact('post'));
     }
 
@@ -37,13 +40,13 @@ class PostController extends Controller
 
     public function edit(Post $post)
     {
-        $this->authorize('manage', $post);
+        $this->authorize('update', $post);
         return view('posts.edit', compact('post'));
     }
 
     public function update(Post $post)
     {
-        $this->authorize('manage', $post);
+        $this->authorize('update', $post);
         $post->update($this->validateRequest(request()));
         toast('Post updated','success','top-right');
         return redirect($post->path());
@@ -51,7 +54,7 @@ class PostController extends Controller
 
     public function destroy(Post $post)
     {
-        $this->authorize('create', Post::class);
+        $this->authorize('delete', $post);
         $this->authorize('manage', $post);
         $post->delete();
         toast('Comment destroyed','success','top-right');

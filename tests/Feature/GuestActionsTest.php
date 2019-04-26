@@ -35,7 +35,7 @@ class GuestActionsTest extends TestCase
         $post = PostFactory::create();
         $this->actingAs($user)->get('/posts/create')->assertStatus(403);
 
-        //Can't a post
+        //Can't post a post
         $this->actingAs($user)->post('/posts', [
                 'title' => 'Hello', 'body' => 'body', 'owner_id' => $user->id
                 ]

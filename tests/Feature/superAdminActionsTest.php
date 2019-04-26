@@ -3,10 +3,13 @@
 namespace Tests\Feature;
 
 use App\Role;
+use App\Permission;
 use Tests\TestCase;
+use Illuminate\Support\Arr;
 use Facades\Tests\Setup\PostFactory;
 use Facades\Tests\Setup\UserFactory;
 use Facades\Tests\Setup\CommentFactory;
+use Facades\Tests\Setup\PermissionFactory;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -85,5 +88,56 @@ class SuperAdminActionsTest extends TestCase
         $this->actingAs($superAdmin)
             ->get(route('admin.roles.index'))->assertSee($roles->first()->name);
     }
+
+    /** @test */
+    public function a_superadmin_can_see_permissions_of_roles()
+    {	
+        $this->withoutExceptionHandling();
+        $superAdmin = UserFactory::withRole('super-admin')->create();
+        $role = Role::whereLevel(2)->first();
+        $this->actingAs($superAdmin)
+            ->get(route('admin.roles.show', $role->id))->assertSee($role->name);
+    }
+
+    /** @test */
+    public function a_superadmin_can_attribute_permissions_of_a_role()
+    {	
+        PermissionFactory::all();
+        $this->withoutExceptionHandling();
+        $superAdmin = UserFactory::withRole('super-admin')->create();
+        $role = Role::whereLevel(2)->first();    
+        $permission = Permission::whereModel('Post')->whereName('edit')->first();
+        $permission2 = Permission::whereModel('Comment')->whereName('create')->first();
+        $attributes = [
+            "permissions" => [
+                $permission->id => 1,
+                 $permission2->id => 1
+            ]
+        ];
+        $this->actingAs($superAdmin)
+            ->patch(route('admin.permissions.update', $role->id), $attributes);
+        //dd($permission);
+        $this->assertDatabaseHas('permission_role', [
+            'role_id' => $role->id, 'permission_id' => $permission->id,
+            'role_id' => $role->id, 'permission_id' => $permission2->id
+        ]);
+    }
+    /** @test */
+    public function a_superadmin_can_can_create_set_of_permission()
+    {
+        $this->withoutExceptionHandling();
+        $superAdmin = UserFactory::withRole('super-admin')->create();
+        $attributes = [
+            'model' =>  'Post'
+        ];
+        $this->actingAs($superAdmin)->post(route('admin.permissions.store'), $attributes);
+        $model = "App\Post";
+        $this->assertDatabaseHas('permissions', [
+            'name' => 'Create post',
+        ]);
+    }
+
+
+
 
 }

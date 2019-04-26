@@ -15,7 +15,7 @@ class UserFactory{
       RoleFactory::create();
    }
 
-   protected $role = "guest";
+   protected $role = "member";
 
    public function withRole($role = null){
       $this->role = $role;

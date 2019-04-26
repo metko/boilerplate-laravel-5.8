@@ -8,7 +8,7 @@ use Facades\Tests\Setup\PermissionFactory;
 
 class RoleFactory{
 
-   protected $roles = ['Guest', 'Moderator', 'Writer', 'Admin', 'Super-Admin'];
+   protected $roles = ['Guest', 'Member',  'Moderator', 'Writer', 'Admin', 'Super-Admin'];
    protected $level = 1;
 
 

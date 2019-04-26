@@ -30,6 +30,12 @@ Route::group(['middleware' => ['hasRole:admin', 'activated']], function() {
 
 
                 Route::get('roles', 'RolesController@index')->name('roles.index');
+                Route::get('roles/create', 'RolesController@create')->name('roles.create');
+                Route::get('roles/{role}', 'RolesController@show')->name('roles.show');
+                
+                Route::get('permissions/create', 'PermissionController@create')->name('permissions.create');
+                Route::patch('permissions/{role}/update', 'PermissionController@update')->name('permissions.update');
+                Route::post('permissions/store', 'PermissionController@store')->name('permissions.store');
         });
 });
 /** END ADMLIN ROURES */

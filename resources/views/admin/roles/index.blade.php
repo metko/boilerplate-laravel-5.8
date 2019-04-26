@@ -3,7 +3,10 @@
 
 @section('content')
    <div class="section-header">
-      <h1>Roles <a href="{{ route('admin.posts.create') }}" class="btn btn-sm btn-primary">Create</a></h1>
+      <h1>Roles 
+        <a href="{{ route('admin.roles.create') }}" class="btn btn-sm btn-primary">Create</a>
+        <a href="{{ route('admin.permissions.create') }}" class="btn btn-sm btn-info">Create Permissions</a>
+      </h1>
       <div class="section-header-breadcrumb">
          <div class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></div>
          <div class="breadcrumb-item active">Roles</div>
@@ -41,7 +44,7 @@
                       <td><span class="badge badge-{{ $role->getClass() }}">{{ $role->level}}</span></td>
                       <td>{{ $role->description}}</td>
                       <td><span class="badge badge-light">{{ $role->users->count()}}</span> users</td>
-                      <td><div class="badge badge-primary">Published</div></td>
+                      <td><a href="{{ route('admin.roles.show', $role->id) }}">Edit</a></td>
                     </tr>
                     @endforeach
                     

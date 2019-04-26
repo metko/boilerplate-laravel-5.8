@@ -96,7 +96,6 @@ class AdminActionsTest extends TestCase
     /** @test */
     public function a_admin_can_update_infos_of_others_account()
     {	
-        //$this->withoutExceptionHandling();
         $admin = UserFactory::withRole('admin')->create();
         $guest = UserFactory::create();
         $attributes = [

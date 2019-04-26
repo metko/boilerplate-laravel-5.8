@@ -4,11 +4,13 @@ namespace Tests\Feature;
 
 use App\Role;
 use App\User;
+use App\Permission;
 use Tests\TestCase;
-use Facades\Tests\Setup\RoleFactory;
 use Facades\Tests\Setup\PostFactory;
+use Facades\Tests\Setup\RoleFactory;
 use Facades\Tests\Setup\UserFactory;
 use Illuminate\Support\Facades\Hash;
+use Facades\Tests\Setup\PermissionFactory;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -47,7 +49,7 @@ class UserTest extends TestCase
     /** @test */
     public function a_new_user_is_level_0_by_default()
     {	  
-        RoleFactory::create('guest', 0) ; 
+        RoleFactory::create() ; 
         $attributes = [
             'name' => "toto",
             'email' => 'toto@toto.com',
@@ -56,7 +58,7 @@ class UserTest extends TestCase
         ];
         $this->post('register', $attributes);
         $user = User::whereName($attributes['name'])->first();
-        $this->assertTrue($user->hasLevel(0));
+        $this->assertTrue($user->hasLevel(1));
     }
 
     /** @test */
@@ -110,6 +112,18 @@ class UserTest extends TestCase
         $this->assertDatabaseHas('users', ['id' => $user->id, 'activated' => false]);
         $this->get(route('profile.index'))->assertStatus(302);
         //dd($user);
+    }
+
+    /** @test */
+    public function a_user_cannot_see_a_post_if_his_not_authorized()
+    {	
+        //$this->withoutExceptionHandling();
+        $user = UserFactory::create();
+        PermissionFactory::all();
+        $viewPost = Permission::whereSlug('post.create')->first();
+        $user->roles->first()->attachPermissions([$viewPost]);
+        
+        $this->actingAs($user)->get(route('posts.index'))->assertStatus(200);
     }
     
 }

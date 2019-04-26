@@ -112,10 +112,15 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasLevel(0);   
     }
 
+    public function isMember()
+    {
+        return $this->hasLevel(1);   
+    }
+
     public function isModerator()
     {
         foreach($this->roles as $role){
-            if($role->level == 1 || $role->level >= 3)
+            if($role->level == 2 || $role->level >= 4)
             {
                 return true;
             }
@@ -125,17 +130,17 @@ class User extends Authenticatable implements MustVerifyEmail
     public function isWriter()
     {
        
-        return $this->hasLevel(2);      
+        return $this->hasLevel(3);      
     }
 
     public function isAdmin()
     {
-        return $this->hasLevel(3);       
+        return $this->hasLevel(4);       
     }
 
     public function isSuperAdmin()
     {
-        return $this->hasLevel(4);     
+        return $this->hasLevel(5);     
     }
 
     public function profile()

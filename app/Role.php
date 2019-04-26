@@ -18,21 +18,23 @@ class Role extends Model
       return $this->belongsToMany(Permission::class)->withTimestamps();
    }
 
-   public function attachPermissions($permission)
+   public function attachPermissions($permissions)
    { 
-      if(is_array($permission)){
-         foreach($permission as $p){
+      //dd($permissions);
+      $this->detachPermissions();
+      if(is_array($permissions)){
+         foreach($permissions as $p){
             $this->permissions()->attach($p);
          }
-         return;
+         return true;
       }
-      return $this->permissions()->attach($permission);
+      return $this->permissions()->attach($permissions);
    }
 
-   public function detachPermissions($permission = null)
+   public function detachPermissions($permissions = null)
    { 
-      if($permission){
-         return $this->permissions()->detach($permission);
+      if($permissions){
+         return $this->permissions()->detach($permissions);
       }
       return $this->permissions()->detach();
    }
