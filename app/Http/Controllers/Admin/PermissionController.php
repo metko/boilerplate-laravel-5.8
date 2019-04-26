@@ -34,7 +34,7 @@ class PermissionController extends AdminController
         $attributes = $this->validate($request, [
             'model' => 'required|min:2|unique:permissions'
         ]);
-
+        
         $permission = new Permission();
         if($permission->createPermission($attributes)){
             return redirect(route('admin.roles.index'))->with('success', 'permissions created');

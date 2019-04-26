@@ -131,7 +131,6 @@ class SuperAdminActionsTest extends TestCase
             'model' =>  'Post'
         ];
         $this->actingAs($superAdmin)->post(route('admin.permissions.store'), $attributes);
-        $model = "App\Post";
         $this->assertDatabaseHas('permissions', [
             'name' => 'Create post',
         ]);

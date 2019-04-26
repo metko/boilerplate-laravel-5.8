@@ -12,7 +12,7 @@ class Post extends Model
         if($admin) {
             return "/admin/posts/".$this->id;
         }
-        return "/posts/".$this->id;
+        return route('posts.show', $this->id);
     }
 
     public function owner()

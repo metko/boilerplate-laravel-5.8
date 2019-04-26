@@ -55,7 +55,6 @@ class PostController extends Controller
     public function destroy(Post $post)
     {
         $this->authorize('delete', $post);
-        $this->authorize('manage', $post);
         $post->delete();
         toast('Comment destroyed','success','top-right');
         return redirect(route('manage.posts'));
@@ -64,8 +63,7 @@ class PostController extends Controller
     public function managePosts()
     {
         $this->authorize('create', Post::class);
-        $posts = auth()->user()->posts;
-        //dd($posts->all());
+        $posts = auth()->user()->posts; 
         return view('posts.managePosts', compact('posts'));
     }
 

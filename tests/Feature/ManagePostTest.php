@@ -20,7 +20,7 @@ class ManagePostTest extends TestCase
     /** @test */
     public function can_view_all_the_posts_only_published()
     {	
-        $this->withoutExceptionHandling();
+        //$this->withoutExceptionHandling();
         $post = PostFactory::create();
         $this->get(route('posts.index'))
                 ->assertSee($post->title); 

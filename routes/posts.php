@@ -5,7 +5,7 @@ Route::resource('posts', 'PostController');
 
 Route::prefix('manage')->name('manage.')->group(function () {
         Route::get('posts', 'PostController@managePosts')
-                ->name('posts')->middleware('hasRole:writer', 'activated');
+                ->name('posts')->middleware('activated'); 
 });
 
 Route::group(['middleware' => ['hasRole:guest', 'activated']], function() {

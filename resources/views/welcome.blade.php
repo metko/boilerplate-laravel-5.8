@@ -11,6 +11,7 @@
     <div class="container">
         <div class="row">
             <div class="column column-75">
+                    @include('flash')
                 <h3>What's is this ?</h3>
                 <hr>
                 <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. A molestias saepe dignissimos assumenda perspiciatis, explicabo provident ratione possimus nesciunt facere quo cumque. Itaque ullam quia in tenetur optio iusto ducimus!</p>

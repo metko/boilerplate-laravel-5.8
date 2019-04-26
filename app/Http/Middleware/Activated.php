@@ -18,6 +18,7 @@ class Activated
      */
     public function handle(Request $request, Closure $next)
     {
+
         if ( Auth::check() && Auth::user()->activated ) {
             return $next($request);
         }else{

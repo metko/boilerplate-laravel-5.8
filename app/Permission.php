@@ -9,10 +9,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Permission extends Model
 {
-    use Permissions;
 
     protected $guarded = [];
- 
+    protected $permissions = ['view', 'create', 'edit', 'delete'];
+    
     public function roles()
     {
         return $this->belongsToMany(Role::class); 
@@ -20,14 +20,15 @@ class Permission extends Model
 
     public function createPermission($model){
         $model = $model['model'];
-
-        foreach($this->getPermissions() as $perm){
+        
+        foreach($this->permissions as $perm){
             $attributes =  [
                 'name' => ucfirst($perm).' '.strtolower($model),
                 'slug' => strtolower($model).'.'.$perm,
                 'description' => $model.' '.$perm.' description',
                 'model' => ucfirst($model)
             ];
+            
             $this->create($attributes);
         }
         return true;

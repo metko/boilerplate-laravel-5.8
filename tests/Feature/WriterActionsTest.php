@@ -37,11 +37,6 @@ class WriterActionsTest extends TestCase
     {	
         $writer = UserFactory::withRole('writer')->create();
         $post = PostFactory::ownedBy($writer)->create();
-        PermissionFactory::all();
-        $action = Permission::whereSlug('post.delete')->first();
-        $writer->roles->first()->attachPermissions($action);
-        //dd($writer->roles->first()->permissions);
-
         $this->actingAs($writer)->delete($post->path())->assertStatus(302);
         $this->assertDatabaseMissing('posts', ['title' =>  $post->title]);
     }
@@ -61,6 +56,7 @@ class WriterActionsTest extends TestCase
     /** @test */
     public function a_writer_cannot_manage_a_post_from_other_writer()
     {	
+        //$this->withoutExceptionHandling();
         $writer =  UserFactory::withRole('writer')->create();
         $post = PostFactory::create();
 
@@ -104,7 +100,6 @@ class WriterActionsTest extends TestCase
     {	
         $writer = UserFactory::withRole('writer')->create();
         $post = PostFactory::withComments(2)->create();
-
         $comment = $post->comments->first();
         $this->actingAs($writer)->patch($comment->path(), ['body' => 'new comment']);
         $this->assertDatabaseHas('comments', $comment->toArray() );
@@ -137,7 +132,6 @@ class WriterActionsTest extends TestCase
     public function a_writer_can_access_to_manage_posts_page()
     {	
         $writer = UserFactory::withRole('writer')->create();
-        $writer->attachRole('writer');
         PermissionFactory::all();
         $createPost = Permission::whereSlug('post.create')->first();
 

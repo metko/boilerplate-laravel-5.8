@@ -3,7 +3,7 @@ Auth::routes();
 Route::get('account/desactivate', 'ActivateController@show')->name('account.activate.notice');
 
 /**USERS ROUTES */
-Route::group(['middleware' => ['auth', 'hasRole:guest', 'activated']], function() {
+Route::group(['middleware' => ['auth', 'activated']], function() {
         
         Route::get('profile', 'UsersController@index')->name('profile.index');
         Route::post('account/desactivate', 'ActivateController@desactivate')->name('account.desactivate');

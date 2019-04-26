@@ -113,17 +113,5 @@ class UserTest extends TestCase
         $this->get(route('profile.index'))->assertStatus(302);
         //dd($user);
     }
-
-    /** @test */
-    public function a_user_cannot_see_a_post_if_his_not_authorized()
-    {	
-        //$this->withoutExceptionHandling();
-        $user = UserFactory::create();
-        PermissionFactory::all();
-        $viewPost = Permission::whereSlug('post.create')->first();
-        $user->roles->first()->attachPermissions([$viewPost]);
-        
-        $this->actingAs($user)->get(route('posts.index'))->assertStatus(200);
-    }
     
 }

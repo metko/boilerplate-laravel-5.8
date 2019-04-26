@@ -23,7 +23,7 @@ class PostTest extends TestCase
     public function it_has_path()
     {	
         $post = PostFactory::create();
-        $this->assertEquals('/posts/' . $post->id, $post->path());
+        $this->assertEquals(route('posts.show', $post->id), $post->path());
     }
     /** @test */
     public function it_has_path_admin()

@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Post;
 use App\Role;
 use Tests\TestCase;
 use Facades\Tests\Setup\PostFactory;
@@ -20,35 +21,34 @@ class GuestActionsTest extends TestCase
     /** @test */
     public function a_guest_can_see_a_post()
     {	
-        $user = UserFactory::create();
+        $guest = UserFactory::create();
         $post = PostFactory::create();
-        $this->actingAs($user)->get($post->path())
+        $this->actingAs($guest)->get(route('posts.index'))
                 ->assertStatus(200)
                 ->assertSee($post->title);
     }
 
     /** @test */
-    public function guests_cannot_manage_posts()
+    public function guest_cannot_manage_posts()
     {	
-        //Form to create a post
-        $user = UserFactory::create();
+        $guest = UserFactory::create();
         $post = PostFactory::create();
-        $this->actingAs($user)->get('/posts/create')->assertStatus(403);
+        $this->actingAs($guest)->get(route('posts.create'))->assertStatus(403);
 
-        //Can't post a post
-        $this->actingAs($user)->post('/posts', [
-                'title' => 'Hello', 'body' => 'body', 'owner_id' => $user->id
+        // Can't post a post
+        $this->actingAs($guest)->post(route('posts.store'), [
+                'title' => 'Hello', 'body' => 'body', 'owner_id' => $guest->id
                 ]
             )->assertStatus(403);
 
-        //Can't update a post
-        $this->actingAs($user)->patch($post->path(), [
+        // Can't update a post
+        $this->actingAs($guest)->patch($post->path(), [
                 'title' => 'Hello', 'body' => 'body'])
                 ->assertStatus(403);
         $this->assertDatabaseMissing('posts', ['title' => 'Hello']);
-
+           
         //Can't delete post
-        $this->actingAs($user)->delete($post->path())->assertStatus(403);
+        $this->actingAs($guest)->delete($post->path())->assertStatus(403);
         $this->assertDatabaseHas('posts', ['title' =>  $post->title]);
     }
 
@@ -101,7 +101,7 @@ class GuestActionsTest extends TestCase
     }
 
     /** @test */
-    public function guest_cant_see_manage_posts_page()
+    public function guest_cannot_see_manage_posts_page()
     {	
         $member = UserFactory::create();
         $post = PostFactory::create();
@@ -161,9 +161,5 @@ class GuestActionsTest extends TestCase
         $this->actingAs($member)->patch(route('profile.update.password', $attributes))
                 ->assertSessionHasErrors(['old_password']);
     }
-
-    
-   
-
 
 }

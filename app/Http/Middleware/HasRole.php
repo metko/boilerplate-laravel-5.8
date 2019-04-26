@@ -4,6 +4,8 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Auth\Access\AuthorizationException;
 
 class HasRole
 {
@@ -20,7 +22,7 @@ class HasRole
         if ( Auth::check() &&  Auth::user()->$role() ){
             return $next($request);
         }else{
-            return abort(403);
+            throw new AuthorizationException('AuthorizationException');
         }   
     }
 }
