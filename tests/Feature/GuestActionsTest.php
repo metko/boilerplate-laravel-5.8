@@ -103,9 +103,10 @@ class GuestActionsTest extends TestCase
     /** @test */
     public function guest_cannot_see_manage_posts_page()
     {	
+        //$this->withoutExceptionHandling();
         $member = UserFactory::create();
         $post = PostFactory::create();
-        $this->actingAs($member)->get(route('manage.posts'))->assertStatus(403);
+        $this->actingAs($member)->get(route('manage.posts'))->assertStatus(403); 
     }
 
     /** @test */

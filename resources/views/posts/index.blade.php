@@ -15,7 +15,7 @@
             <p>{{ $post->excerpt() }}</p>
             <p>Created at: {{ $post->created_at->format('d/m/Y')}}</p>
             <a href="{{ $post->path() }}" class="button-small">Read more</a>
-            @can('manage', $post)
+            @can('update', $post)
                <a href="{{ route('posts.edit', $post->id) }}" class="button-small">manage</a>
             @endif
          </article>

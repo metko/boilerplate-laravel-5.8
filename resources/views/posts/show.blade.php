@@ -7,14 +7,19 @@
             <div class="container-nm">
                   <h1>{{$post->title}}</h1>
                   <span> <strong>{{$post->owner->name}}</strong></span>
-                  @can('manage', $post)
+
+                  @can('update', $post)
                         <a href="{{ route('posts.edit', $post->id) }}" class="button-small-outline">Edit</a>
+                  @endcan
+                  @can('destroy', $post)
                         <form action="{{ route('posts.destroy', $post->id) }}" method='POST' style="display: inline">
-                              @csrf
-                              @method('DELETE')
-                              <button type="submit" class="button-small">Delete</button>
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="button-small">Delete</button>
                         </form>
                   @endcan
+                        
+                 
             </div>
       </div>
 
@@ -24,20 +29,20 @@
             <p>{!! $post->body !!}</p>
             <hr>
             <h3>{{ $post->comments->count() }} comments</h3>
-            @can('create', App\Comment::class)
-            <form action="{{ $post->path() . '/comments' }}" method="POST">
-                  @csrf
-                  <textarea name="body" id="" ></textarea>
-                  <button type="submit" class="button">Save comment</button>
-            </form>
-            @endcan
+            @Auth
+                  <form action="{{ $post->path() . '/comments' }}" method="POST">
+                        @csrf
+                        <textarea name="body" id="" ></textarea>
+                        <button type="submit" class="button">Save comment</button>
+                  </form>
+            @endauth
             <div class="comments">
                   @forelse ($post->comments as $comment)
                         <div class="card">
                               <div class="content">
                                     <span class="name">{{ $comment->owner->name}}</span>
                                   
-                                    @can('manage', $comment)
+                                    @can('update', $comment)
                                           <form class="form-edit-comment" action="{{ route('posts.comments.update', $comment->id) }}" method="POST">
                                                 @csrf
                                                 @method("PATCH")
@@ -49,7 +54,7 @@
                                           <span class="body">{{ $comment->body}}</span>
                                     @endif
                               </div>
-                              @can('manage', $comment)
+                              @can('destroy', $comment)
                                     <div class="actions">
                                           <form class="form-edit-comment" action="{{ route('posts.comments.destroy', $comment->id) }}" method="POST">
                                                 @csrf

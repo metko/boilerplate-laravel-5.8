@@ -17,12 +17,12 @@ class Activated
      * @return mixed
      */
     public function handle(Request $request, Closure $next)
-    {
+    { 
 
         if ( Auth::check() && Auth::user()->activated ) {
             return $next($request);
         }else{
-             return Redirect::route('account.activate.notice')->with('error', 'your account is desactivated');
+            throw new AuthorizationException('AuthorizationException');
         }
     }
 }

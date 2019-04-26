@@ -110,7 +110,6 @@ class WriterActionsTest extends TestCase
     {	
         $writer = UserFactory::withRole('writer')->create();
         $post = PostFactory::ownedBy($writer)->withComments(2)->create();
-
         $comment = $post->comments->first();
         $this->actingAs($writer)->delete($comment->path())
                 ->assertRedirect($post->path());

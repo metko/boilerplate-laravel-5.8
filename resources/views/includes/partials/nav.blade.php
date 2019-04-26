@@ -6,9 +6,9 @@
          <div>
                <ul>
                   <li><a href="{{ route('posts.index') }}">Blog</a></li>
-                  @writer
+                  @can('create', 'App\Post')
                          <li><a href="{{ route('manage.posts') }}">My posts</a></li>
-                  @endwriter
+                  @endcan
                </ul> 
            </div>
             <div class="nav-links-right">

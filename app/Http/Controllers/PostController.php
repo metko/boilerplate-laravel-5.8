@@ -7,16 +7,16 @@ use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
+    
+   
 
     public function index(){
-        //$this->authorize('view', Post::class);
         $posts = Post::latest()->get();
         return view('posts.index', compact('posts'));
     }
 
     public function show(Post $post)
     {	
-        //$this->authorize('view', Post::class);
         return view('posts.show', compact('post'));
     }
 
@@ -33,9 +33,7 @@ class PostController extends Controller
         $this->authorize('create', Post::class);
         $attributes = $this->validateRequest(request());
         $post = $post->createPost($attributes);
-        toast('Post saved','success','top-right');
-
-        return redirect($post->path());
+        return redirect($post->path())->with('success', 'Post saved');
     }
 
     public function edit(Post $post)
@@ -48,16 +46,14 @@ class PostController extends Controller
     {
         $this->authorize('update', $post);
         $post->update($this->validateRequest(request()));
-        toast('Post updated','success','top-right');
-        return redirect($post->path());
+        return redirect($post->path())->with('success', 'post updated');
     }
 
     public function destroy(Post $post)
-    {
+    { 
         $this->authorize('delete', $post);
         $post->delete();
-        toast('Comment destroyed','success','top-right');
-        return redirect(route('manage.posts'));
+        return redirect(route('manage.posts'))->with('success', 'post deleted');;
     }
 
     public function managePosts()

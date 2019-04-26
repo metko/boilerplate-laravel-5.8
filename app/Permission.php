@@ -5,13 +5,14 @@ namespace App;
 use App\Permission;
 use App\Traits\Permissions;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
 
 class Permission extends Model
 {
 
     protected $guarded = [];
-    protected $permissions = ['view', 'create', 'edit', 'delete'];
+    protected $permissions = ['view', 'create', 'update', 'delete'];
     
     public function roles()
     {
@@ -24,7 +25,7 @@ class Permission extends Model
         foreach($this->permissions as $perm){
             $attributes =  [
                 'name' => ucfirst($perm).' '.strtolower($model),
-                'slug' => strtolower($model).'.'.$perm,
+                'slug' => Str::snake($model).'.'.$perm,
                 'description' => $model.' '.$perm.' description',
                 'model' => ucfirst($model)
             ];

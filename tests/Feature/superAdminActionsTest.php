@@ -106,17 +106,19 @@ class SuperAdminActionsTest extends TestCase
         $this->withoutExceptionHandling();
         $superAdmin = UserFactory::withRole('super-admin')->create();
         $role = Role::whereLevel(2)->first();    
-        $permission = Permission::whereModel('Post')->whereName('edit')->first();
-        $permission2 = Permission::whereModel('Comment')->whereName('create')->first();
+        $permission = Permission::whereModel('Post')->whereName('update')->first();
+        $permission2 = Permission::whereModel('PostComment')->whereName('create')->first();
         $attributes = [
             "permissions" => [
                 $permission->id => 1,
-                 $permission2->id => 1
+                $permission2->id => 1
             ]
         ];
         $this->actingAs($superAdmin)
             ->patch(route('admin.permissions.update', $role->id), $attributes);
         //dd($permission);
+        $this->assertTrue($role->hasPermissions($permission));
+        $this->assertTrue($role->hasPermissions($permission2));
         $this->assertDatabaseHas('permission_role', [
             'role_id' => $role->id, 'permission_id' => $permission->id,
             'role_id' => $role->id, 'permission_id' => $permission2->id

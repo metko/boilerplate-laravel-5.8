@@ -39,6 +39,12 @@ class Role extends Model
       return $this->permissions()->detach();
    }
 
+   public function hasPermissions($permissions)
+   {
+    
+      return $this->permissions->contains($permissions);
+   }
+
    public function getClass()
    {
       if($this->level == 0){

@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Unit;
 
 use App\Role;
 use App\User;
@@ -61,7 +61,7 @@ class RoleTest extends TestCase
     {
         $role = RoleFactory::create('writer');
         $permissions = PermissionFactory::count(2)->create();
-        $role->attachPermissions([$permissions[0], $permissions[1]]);
+        $role->attachPermissions($permissions);
         $this->assertCount(2, $role->permissions);
     }
 
@@ -85,6 +85,15 @@ class RoleTest extends TestCase
         $this->actingAs($superAdmin)
             ->patch(route('admin.permissions.update', $role->id), $attributes)
             ->assertRedirect(route('admin.roles.show', $role->id));
+    }
+
+    /** @test */
+    public function a_role_can_check_if_he_has_permissions()
+    {	
+        $role = RoleFactory::create('writer');
+        $permissions = PermissionFactory::count(2)->create();
+        $role->attachPermissions($permissions);
+        $this->assertTrue($role->hasPermissions($permissions[0]));
     }
 
 }

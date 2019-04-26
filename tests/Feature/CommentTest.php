@@ -17,15 +17,17 @@ class CommentTest extends TestCase
     /** @test */
     public function a_comment_must_have_valide_data()
     {	
+        
         //$this->withoutExceptionHandling();
         $user = UserFactory::create();
         $post = PostFactory::create();
-
+        
         //Create no validated
         $this->actingAs($user)->post($post->path().'/comments', [
                 'body' => 'Th',
                 'post_id' => $post->id
             ]);
+       
         $this->assertDatabaseMissing('comments', ['body' => 'The body']);
         //Create validated
         $this->actingAs($user)->post($post->path().'/comments', [

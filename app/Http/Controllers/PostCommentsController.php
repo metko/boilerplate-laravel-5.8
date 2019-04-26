@@ -21,8 +21,7 @@ class PostCommentsController extends Controller
     {
         $attributes = $this->validateRequest($request);
         $comment = $post->addComment($attributes);
-        toast('Comment saved','success','top-right');
-        return redirect($post->path());
+        return redirect($post->path())->with('success', 'post stored');
     }
 
     /**
@@ -35,12 +34,10 @@ class PostCommentsController extends Controller
      */
     public function update(Request $request, Comment $comment)
     {   
-        $this->authorize('manage', $comment);
+        $this->authorize('update', $comment);
         $attributes = $this->validateRequest($request);
         $comment->update($attributes);
-        toast('Comment updated','success','top-right');
-
-        return redirect($comment->post->path());
+        return redirect($comment->post->path())->with('success', 'post updated');
     }
 
     /**
@@ -53,10 +50,9 @@ class PostCommentsController extends Controller
      */
     public function destroy(Request $request, Comment $comment)
     {
-        $this->authorize('manage', $comment);
+        $this->authorize('delete', $comment);
         $comment->delete();
-        toast('Comment destroyed','success','top-right');
-        return redirect($comment->post->path());
+        return redirect($comment->post->path())->with('success', 'post deleted');
     }
 
     /**

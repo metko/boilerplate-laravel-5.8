@@ -2,9 +2,7 @@
 
 namespace App\Traits;
 
-use App\Post;
 use App\User;
-use App\Permission;
 use Illuminate\Auth\Access\AuthorizationException;
 
 trait Permissions
@@ -33,9 +31,23 @@ trait Permissions
        *
        * @return bool
       */
-      public function manage(User $user, Post $post)
+      public function manage(User $user, $model)
       {
-            return $user->id == $post->owner_id; 
+            $pivot = $this->getPivot();
+            if($user->id == $model->owner_id){
+                  return true;
+            }elseif($pivot != $this->slug){
+                  return $user->id == $model->$pivot->owner_id;
+            }
+      }
+
+      /**
+       * getPivot
+       *
+       * @return void
+       */
+      public function getPivot(){
+            return explode('_', $this->slug)[0];
       }
         
       /**
@@ -45,7 +57,7 @@ trait Permissions
        *
        * @return bool
       */
-      public function view(User $user)
+      public function view(User $user, $model)
       {
             foreach($user->roles as $role){
                   if($roles->permissions->contains('slug', $this->slug.'.view')){
@@ -63,7 +75,6 @@ trait Permissions
       */
       public function create(User $user)
       {    
-            
             foreach($user->roles as $role){
                   if($role->permissions->contains('slug', $this->slug.'.create')){
                         return true;
@@ -79,16 +90,18 @@ trait Permissions
        *
        * @return bool
       */
-      public function update(User $user, $post)
+      public function update(User $user, $model)
       {
-            if($this->manage($user, $post)){
+            if($this->manage($user, $model)){
                   return true;
             }
+            
             foreach($user->roles as $role){
                   if($role->permissions->contains('slug', $this->slug.'.update')){
                         return true;
                   }
             } 
+            
       }
 
       /**
@@ -99,9 +112,9 @@ trait Permissions
        *
        * @return bool
       */
-      public function delete(User $user, $post)
+      public function delete(User $user, $model)
       {
-            if($this->manage($user, $post)){
+            if($this->manage($user, $model )){
                   return true;
             }
             foreach($user->roles as $role){
@@ -110,5 +123,29 @@ trait Permissions
                   }
             } 
       }
+
+      /**
+     * Determine whether the user can restore the test.
+     *
+     * @param  \App\User  $user
+     * @param  \App\Model  $model
+     * @return mixed
+     */
+    public function restore(User $user, $model)
+    {
+        //
+    }
+
+    /**
+     * Determine whether the user can permanently delete the test.
+     *
+     * @param  \App\User  $user
+     * @param  \App\Model  $model
+     * @return mixed
+     */
+    public function forceDelete(User $user, $model)
+    {
+        //
+    }
 
 }

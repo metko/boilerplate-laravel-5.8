@@ -2,9 +2,11 @@
 
 namespace Tests\Feature;
 
+use App\Permission;
 use Tests\TestCase;
 use Facades\Tests\Setup\PostFactory;
 use Facades\Tests\Setup\UserFactory;
+use Facades\Tests\Setup\PermissionFactory;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -18,6 +20,12 @@ class ModderatorActionsTest extends TestCase
         $this->withoutExceptionHandling();
         $moderator = UserFactory::withRole('moderator')->create();
         $post = PostFactory::withComments(2)->create();
+        PermissionFactory::all();
+        
+        $permissions = Permission::whereModel('PostComment')->get();
+        
+        $moderator->roles->first()->attachPermissions($permissions);
+        //dd( $moderator->roles->first()->permissions);
         $this->actingAs($moderator)->patch($post->comments->first()->path(), ['body' => 'new body']);
         $this->assertdatabaseHas('comments', ['body' => 'new body']);
     }

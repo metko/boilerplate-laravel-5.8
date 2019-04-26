@@ -6,7 +6,7 @@ use Faker\Generator as Faker;
 
 $factory->define(App\Post::class, function (Faker $faker) {
     return [
-        'title' => $faker->name,
+        'title' => "Fuck faker",
         'body' => $faker->paragraph,
         // 'status_id' => function() {
         //     return factory(PostStatus::class)->create()->id;

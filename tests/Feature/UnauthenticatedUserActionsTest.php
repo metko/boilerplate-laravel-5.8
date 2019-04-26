@@ -29,9 +29,8 @@ class UnauthenticatedUserActionsTest extends TestCase
     {	
         //$this->withoutExceptionHandling();
         $post = PostFactory::create();
-
         $this->post($post->path().'/comments', ['body' => 'This is a comment', 'post_id' => $post->id])
-                    ->assertStatus(403);
+                    ->assertStatus(500);
         $this->assertDatabaseMissing('comments', ['body' => 'This is a comment']);
                
     }

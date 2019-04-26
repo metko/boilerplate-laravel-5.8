@@ -3,6 +3,7 @@
 namespace Tests\Setup;
 
 use App\Permission;
+use Illuminate\Support\Str;
  
 
 class PermissionFactory{
@@ -26,17 +27,17 @@ class PermissionFactory{
    public function all(){
       $permissions = [
          'Post' => [
-            'all', 'view' , 'create' , 'edit', 'delete' 
+            'all', 'view' , 'create' , 'update', 'delete' 
          ],
-         'Comment' => [
-            'all', 'view' , 'create' , 'edit', 'delete' 
+         'PostComment' => [
+            'all', 'view' , 'create' , 'update', 'delete' 
          ],
       ];
       foreach($permissions as $modelName => $actions){
          foreach($actions as $action){
             factory(Permission::class)->create([
                'name' => $action,
-               'slug' => strtolower($modelName).".".$action,
+               'slug' => Str::snake($modelName).".".$action,
                'description' => $modelName. ' '.$action. ' description',
                'model' => $modelName 
             ]);
