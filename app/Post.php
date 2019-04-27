@@ -31,6 +31,11 @@ class Post extends Model
         return $this->hasMany(Comment::class)->latest('id');
     }
 
+    public function medias()
+    {
+        return $this->morphMany(Media::class, 'subject');
+    }
+
     public function excerpt()
     {	
         return \Illuminate\Support\Str::limit($this->body, 150, '...');

@@ -4,6 +4,7 @@ namespace Tests\Unit;
 
 use App\Post;
 use App\User;
+use App\Media;
 use App\Comment;
 use App\PostStatus;
 use Tests\TestCase;
@@ -95,5 +96,16 @@ class PostTest extends TestCase
         $date = $post->created_at->locale('pt');
         $date = ucfirst($date->shortDayName)." ".$date->day." ".ucfirst($date->shortMonthName)." ".$date->year;
         $this->assertEquals($date, $post->lastUpdate());
+    }
+
+    /** @test */
+    public function a_post_have_medias()
+    {
+        $this->withoutExceptionHandling();
+        $post = PostFactory::create();
+        $media = factory(Media::class)->create(
+            ['subject_type' => get_class($post), 'subject_id' => $post->id ]
+        );
+        $this->assertInstanceOf(Media::class, $post->medias->first());
     }
 }

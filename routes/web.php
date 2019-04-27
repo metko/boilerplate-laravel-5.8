@@ -19,6 +19,8 @@ include(base_path('routes/users.php'));
 include(base_path('routes/admin.php'));
 include(base_path('routes/posts.php'));
 
+Route::post('medias/store', 'MediasController@store')->name('medias.store');
+
 
 
 Route::get('/home', 'HomeController@index')->name('home')->middleware('activated');

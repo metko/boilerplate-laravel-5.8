@@ -21,7 +21,7 @@
                @forelse($users as $user)
                <tr>
                <td>
-                  <a href="#" class="font-weight-600"><img src="{{ $user->gravatar() }}" alt="avatar" width="30" class="rounded-circle mr-1">{{ $user->name }}</a>
+                  <a href="#" class="font-weight-600"><img src="{{ $user->avatar() }}" alt="avatar" width="30" class="rounded-circle mr-1">{{ $user->name }}</a>
                </td>
                <td>
                      {{$user->email}}

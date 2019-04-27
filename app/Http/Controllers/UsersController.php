@@ -5,10 +5,12 @@ namespace App\Http\Controllers;
 use App\User;
 use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
+use App\Traits\MediaUploadTrait;
 use Illuminate\Support\Facades\Hash;
 
 class UsersController extends Controller
 {
+    use MediaUploadTrait;
 
     /**
      * index
@@ -121,5 +123,15 @@ class UsersController extends Controller
         ];
 
         return $attributes;
+    }
+
+
+
+    public function storeAvatar(Request $request)
+    {
+        $media = $request->file('file');
+        $filename = auth()->user()->id.'_'.auth()->user()->name;
+        $model = auth()->user();
+        $this->uploadMedia($media, $model , $filename);     
     }
 }

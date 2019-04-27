@@ -1,6 +1,13 @@
 @extends('layouts.app')
 @section('title', 'Profil' )
 
+@push('scripts')
+<script src="{{ asset('js/dropzone.js') }}"></script> 
+@endpush
+@push('styles')
+<link rel="stylesheet" href="{{ asset('css/dropzone.css') }}">
+@endpush
+
 @section('content')
    <div class="hero">
       <div class="container-nm">
@@ -17,6 +24,14 @@
                   @include('flash')
 
                    <h3>Profile</h3>
+                   <img src="{{ $user->avatar() }}" alt="">
+                  <form action="{{ route('profile.store.avatar') }}" method='post' enctype="multipart/form-data"
+                     class="dropzone"
+                     id="my-awesome-dropzone">
+                     @csrf
+                    
+                  </form>
+
                   <div>
                      <strong>Username : </strong> {{ $user->name }}
                   </div>

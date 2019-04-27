@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Role;
+use App\Media;
 use App\Comment;
 use App\Profile;
 use Illuminate\Support\Arr;
@@ -51,6 +52,11 @@ class User extends Authenticatable implements MustVerifyEmail
     public function posts()
     {
         return $this->hasMany(Post::class, 'owner_id');
+    }
+
+    public function medias()
+    {
+        return $this->morphMany(Media::class, 'subject');
     }
 
     public function adminPath()
@@ -148,6 +154,14 @@ class User extends Authenticatable implements MustVerifyEmail
     public function gravatar()
     {
         return 'https://www.gravatar.com/avatar/' . md5($this->email) . '?d=mm&s=100';
+    }
+
+    public function avatar()
+    {
+        if(count($this->medias)){
+            return $this->medias->where('size', 300)->first()->path;
+        }
+        return $this->gravatar();
     }
 
     public function editProfile($attributes)

@@ -5,6 +5,7 @@ namespace Tests\Unit;
 use App\Post;
 use App\Role;
 use App\User;
+use App\Media;
 use App\Comment;
 use App\Profile;
 use Tests\TestCase;
@@ -178,6 +179,18 @@ class UserTest extends TestCase
         $comments = CommentFactory::count(2)->withPost($post2)->createdBy($user)->create();
         $this->assertInstanceOf(Comment::class, $user->comments->first());
         $this->assertEquals(5, $user->comments->count());
+    }
+
+    /** @test */
+    public function a_user_have_medias()
+    {
+        $this->withoutExceptionHandling();
+        $user = UserFactory::create();
+        $media = factory(Media::class)->create(
+            ['subject_type' => get_class($user), 'subject_id' => $user->id ]
+        );
+        //dd($user->medias); 
+        $this->assertInstanceOf(Media::class, $user->medias->first());
     }
 
 
